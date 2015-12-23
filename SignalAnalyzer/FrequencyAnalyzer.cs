@@ -26,7 +26,7 @@ namespace SignalAnalyzer
             Console.WriteLine("Data times Gaussian is...");
             var window = new WindowFunction();
             var gaussianData = new double[splitData.Length][];
-            for (int i = 0; i < gaussianData.Length; i++) gaussianData[i] = window.Gaussian(splitData[i]);
+            for (int i = 0; i < gaussianData.Length; i++) gaussianData[i] = window.Hanning(splitData[i]);
             Console.WriteLine("Done!");
 
             Console.WriteLine("STFT Data...");
