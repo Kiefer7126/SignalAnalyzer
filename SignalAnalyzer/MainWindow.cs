@@ -149,8 +149,8 @@ namespace SignalAnalyzer
             var graph = new Graph();
             graph.drawBeat(this.chartcontrol, beat);
 
-            //var exportFile = new ExportFile();
-            //exportFile.WriteMetricalText(beat);
+            var exportFile = new ExportFile();
+            exportFile.WriteMetricalText(beat);
         }
     }
 }
