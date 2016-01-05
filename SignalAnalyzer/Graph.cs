@@ -168,11 +168,11 @@ namespace SignalAnalyzer
                 var beat = beatDetection.main(freq);
 
                 /* ピーク検出 */
-                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*2000));
+                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*20000));
 
-                /* 立ち上がり成分 
-                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /10));
-                */
+                /* 立ち上がり成分 */
+                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /10));
+                
 
                 //Graphicsリソース解放
                 g.Dispose();
