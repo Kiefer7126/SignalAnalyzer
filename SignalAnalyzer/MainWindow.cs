@@ -152,5 +152,14 @@ namespace SignalAnalyzer
             var exportFile = new ExportFile();
             exportFile.WriteMetricalText(beat);
         }
+
+        private void experimentsButton_Click(object sender, EventArgs e)
+        {
+            //"C:\test"以下のファイルをすべて取得する
+            //ワイルドカード"*"は、すべてのファイルを意味する
+            string[] files = System.IO.Directory.GetFiles(@"C:\Users\b1012046\Music\V.A\RWC研究用音楽データベース Disc 1", "*", System.IO.SearchOption.AllDirectories);
+
+            foreach(var item in files) Console.WriteLine(item);
+        }
     }
 }

@@ -52,6 +52,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.beat = new System.Windows.Forms.Button();
             this.beatDetectionButton = new System.Windows.Forms.Button();
+            this.experimentsButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -241,11 +242,22 @@
             this.beatDetectionButton.UseVisualStyleBackColor = true;
             this.beatDetectionButton.Click += new System.EventHandler(this.beatDetectionButton_Click);
             // 
+            // experimentsButton
+            // 
+            this.experimentsButton.Location = new System.Drawing.Point(270, 41);
+            this.experimentsButton.Name = "experimentsButton";
+            this.experimentsButton.Size = new System.Drawing.Size(75, 23);
+            this.experimentsButton.TabIndex = 7;
+            this.experimentsButton.Text = "experiments";
+            this.experimentsButton.UseVisualStyleBackColor = true;
+            this.experimentsButton.Click += new System.EventHandler(this.experimentsButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 720);
+            this.Controls.Add(this.experimentsButton);
             this.Controls.Add(this.beatDetectionButton);
             this.Controls.Add(this.beat);
             this.Controls.Add(this.panel1);
@@ -288,6 +300,7 @@
         private System.Windows.Forms.ToolStripMenuItem exMetricalWavMenu;
         private System.Windows.Forms.Button beat;
         private System.Windows.Forms.Button beatDetectionButton;
+        private System.Windows.Forms.Button experimentsButton;
     }
 }
 
