@@ -21,7 +21,7 @@ namespace SignalAnalyzer
          *                キャンセルされた場合は空文字
          */
 
-        private string OpenFileDialog(Formats format)
+        public string OpenFileDialog(Formats format)
         {
             string loadFileName = "";
             OpenFileDialog dialog = new OpenFileDialog();
@@ -43,13 +43,13 @@ namespace SignalAnalyzer
          * @return string[] textArray
          */
 
-        public string[] ReadText(Formats format)
+        public string[] ReadText(Formats format, string fileName)
         {
             string loadFileName = "";
             string readText = "";
             string[] textArray;
 
-            loadFileName = OpenFileDialog(format);
+            loadFileName = fileName;
 
             if (loadFileName == "" || loadFileName == null) return null;
             else
@@ -71,13 +71,13 @@ namespace SignalAnalyzer
          * @return int[] originalData
          */
 
-        public int[] ReadAudioText()
+        public int[] ReadAudioText(string fileName)
         {
             string[] textArray;
             string[] textArrayWithoutSpaces;
             int[] originalData;
             
-            textArray = ReadText(Formats.Text);
+            textArray = ReadText(Formats.Text, fileName);
             textArrayWithoutSpaces = textArray.Where(c => c != "").ToArray();
             originalData = new int[textArrayWithoutSpaces.Length];
             
@@ -92,14 +92,14 @@ namespace SignalAnalyzer
          * @return MetricalStructure metricalstruct
          */
 
-        public MetricalStructure ReadMetric()
+        public MetricalStructure ReadMetric(string fileName)
         {
             Console.WriteLine("Read Metrical Structure...");
             var metricalStruct = new MetricalStructure();
             int[] rightTime, leftTime, ticks;
             string[] splitText, splitElement;
 
-            splitText = ReadText(Formats.Text);
+            splitText = ReadText(Formats.Text, fileName);
             
             rightTime = new int[splitText.Length-1];
             leftTime  = new int[splitText.Length-1];
@@ -127,12 +127,10 @@ namespace SignalAnalyzer
          * @return WavFile wavFile
          */
 
-        public WavFile ReadAudioWav()
+        public WavFile ReadAudioWav(string fileName)
         {
-            string loadFileName = "";
+            string loadFileName = fileName;
             WavFile wavFile = new WavFile();
-
-            loadFileName = OpenFileDialog(Formats.Wav);
 
             if (loadFileName == "" || loadFileName == null) return null;
             else

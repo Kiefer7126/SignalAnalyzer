@@ -40,7 +40,7 @@ namespace SignalAnalyzer
         *         ダイアログがキャンセルされた場合は空文字を返す
         */
 
-        private string SaveFileDialog(Formats format)
+        public string SaveFileDialog(Formats format)
         {
             string writeFileName = "";
             SaveFileDialog dialog = new SaveFileDialog();
@@ -98,13 +98,10 @@ namespace SignalAnalyzer
          * @return なし
          */
 
-        public void WriteClick(double[] data)
+        public void WriteClick(double[] data, string fileName)
         {
             //書き込むファイル名
-            string writeFileName = "";
-
-            //書き込むファイル名の取得
-            writeFileName = SaveFileDialog(Formats.Wav);
+            string writeFileName = fileName;
 
             if (writeFileName == "" || writeFileName == null) { }//ファイル名が取得されていなければ、処理を続行しない
             else
@@ -160,11 +157,9 @@ namespace SignalAnalyzer
          * @return なし
          */
 
-        public Boolean WriteMetricalText(double[] beat)
+        public Boolean WriteMetricalText(double[] beat, string fileName)
         {
-            string writeFileName = "";
-
-            writeFileName = SaveFileDialog(Formats.Text);
+            string writeFileName = fileName;
 
             if (writeFileName == "" || writeFileName == null) return false;
             else

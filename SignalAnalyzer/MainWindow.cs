@@ -33,7 +33,8 @@ namespace SignalAnalyzer
         private void imMetricalMenu_Click(object sender, EventArgs e)
         {
             var importFile = new ImportFile();
-            metricalStruct = importFile.ReadMetric();
+            string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
+            metricalStruct = importFile.ReadMetric(beatFileName);
         }
 
         /**
@@ -46,7 +47,8 @@ namespace SignalAnalyzer
         private void imAudio_TextMenu_Click(object sender, EventArgs e)
         {
             var importFile = new ImportFile();
-            int[] originalData = importFile.ReadAudioText();
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
+            int[] originalData = importFile.ReadAudioText(fileName);
             var graph = new Graph();
             graph.draw(this.chartcontrol, originalData);
 
@@ -62,8 +64,8 @@ namespace SignalAnalyzer
         private void imAudio_wavMenu_Click(object sender, EventArgs e)
         {
             var importFile = new ImportFile();
-
-            wavFile = importFile.ReadAudioWav();
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
+            wavFile = importFile.ReadAudioWav(fileName);
             var graph = new Graph();
             graph.draw(this.chartcontrol, wavFile.RightData);
         }
@@ -90,7 +92,8 @@ namespace SignalAnalyzer
         private void testButton_Click(object sender, EventArgs e)
         {
             var importFile = new ImportFile();
-            wavFile = importFile.ReadAudioWav();
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
+            wavFile = importFile.ReadAudioWav(fileName);
             var graph = new Graph();
             graph.draw(this.chartcontrol, wavFile.RightData);
 
@@ -112,17 +115,20 @@ namespace SignalAnalyzer
             var beatStructure = new double[wavFile.RightData.Length];
             beatStructure = generateWave.beat(wavFile, metricalStruct);
             var export = new ExportFile();
-            export.WriteClick(beatStructure);
+            string fileName = export.SaveFileDialog(ExportFile.Formats.Wav);
+            export.WriteClick(beatStructure, fileName);
         }
 
         private void beat_Click(object sender, EventArgs e)
         {
             //importAudio
             var importFile = new ImportFile();
-            wavFile = importFile.ReadAudioWav();
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
+            wavFile = importFile.ReadAudioWav(fileName);
             
             //importBeatStructure
-            metricalStruct = importFile.ReadMetric();
+            string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
+            metricalStruct = importFile.ReadMetric(beatFileName);
 
             //generateClick
             var generateWave = new GenerateWave();
@@ -131,13 +137,15 @@ namespace SignalAnalyzer
 
             //exportClick
             var export = new ExportFile();
-            export.WriteClick(beatStructure);
+            string expfileName = export.SaveFileDialog(ExportFile.Formats.Wav);
+            export.WriteClick(beatStructure, expfileName);
         }
 
         private void beatDetectionButton_Click(object sender, EventArgs e)
         {
             var importFile = new ImportFile();
-            wavFile = importFile.ReadAudioWav();
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
+            wavFile = importFile.ReadAudioWav(fileName);
 
             var freqAnalyzer = new FrequencyAnalyzer();
             freqAnalyzer.STFT(wavFile.RightData);
@@ -150,16 +158,45 @@ namespace SignalAnalyzer
             graph.drawBeat(this.chartcontrol, beat);
 
             var exportFile = new ExportFile();
-            exportFile.WriteMetricalText(beat);
+            string exportFileName = exportFile.SaveFileDialog(ExportFile.Formats.Text);
+            exportFile.WriteMetricalText(beat, exportFileName);
         }
 
         private void experimentsButton_Click(object sender, EventArgs e)
         {
-            //"C:\test"以下のファイルをすべて取得する
-            //ワイルドカード"*"は、すべてのファイルを意味する
-            string[] files = System.IO.Directory.GetFiles(@"C:\Users\b1012046\Music\V.A\RWC研究用音楽データベース Disc 1", "*", System.IO.SearchOption.AllDirectories);
+            //ファイルをすべて取得する
+            //string[] files = System.IO.Directory.GetFiles(@"C:\Users\b1012046\Music\V.A\RWC研究用音楽データベース Disc 1", "*", System.IO.SearchOption.AllDirectories);
+            string[] files = System.IO.Directory.GetFiles(@"C:\Users\sawada\Music\Pops", "*", System.IO.SearchOption.AllDirectories);
 
-            foreach(var item in files) Console.WriteLine(item);
+            var importFile = new ImportFile();
+            var freqAnalyzer = new FrequencyAnalyzer();
+            var beatDetection = new BeatDetection();
+            var exportFile = new ExportFile();
+            var generateWave = new GenerateWave();
+            
+
+            int count = 1;
+            foreach (var fileName in files)
+            {
+                wavFile = importFile.ReadAudioWav(fileName);
+
+                freqAnalyzer.STFT(wavFile.RightData);
+
+                var beat = new double[freqAnalyzer.stftData.Length];
+                beat = beatDetection.main(freqAnalyzer);
+
+                string noExtFileName = fileName.Replace(".wav", "");
+                exportFile.WriteMetricalText(beat, noExtFileName + "_beat.txt");
+                
+                var beatStructure = new double[wavFile.RightData.Length];
+                metricalStruct = importFile.ReadMetric(noExtFileName + "_beat.txt");
+                beatStructure = generateWave.beat(wavFile, metricalStruct);
+
+                exportFile.WriteClick(beatStructure, noExtFileName + "_beat.Wav");
+
+                Console.WriteLine("100個中"+ count + "個のデータを処理");
+                count++;
+            }
         }
     }
 }
