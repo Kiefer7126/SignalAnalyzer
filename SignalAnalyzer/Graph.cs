@@ -142,8 +142,11 @@ namespace SignalAnalyzer
                         plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 5 / (dataMax - dataMin));
                         ToHsv(plotData);
 
-                        //Pen p = new Pen(Color.FromArgb(red, green, blue), penSize);
+                        /* color */
                         pen.Color = Color.FromArgb(red, green, blue);
+
+                        /* monochrome */
+                        //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
 
                         g.DrawLine(pen,
                              (float)(xZero + xStep * (time - 1)),
@@ -171,7 +174,7 @@ namespace SignalAnalyzer
                 for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*20000));
 
                 /* 立ち上がり成分 */
-                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /10));
+                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /50));
                 
 
                 //Graphicsリソース解放
