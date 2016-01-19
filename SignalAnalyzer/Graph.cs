@@ -148,6 +148,7 @@ namespace SignalAnalyzer
                         /* monochrome */
                         //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
 
+
                         g.DrawLine(pen,
                              (float)(xZero + xStep * (time - 1)),
                              (float)(yZero - i * yStep - penSize / 2),

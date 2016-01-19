@@ -33,7 +33,6 @@ namespace SignalAnalyzer
             int beatInterval = CalcBeatInterval(peekTime);
             Console.WriteLine(beatInterval);
 
-
             //ビート系列の作成
             double[] beat = makeBeat(beatInterval, peekTime.Length, startTime);
             Console.WriteLine(peekTime.Length);
@@ -121,7 +120,8 @@ namespace SignalAnalyzer
 
         public double[] PeakDetection(double[] data)
         {
-            var peekTime = SavitzkyGolayFilter(data, 12);
+
+            var peekTime = SavitzkyGolayFilter2(data, 12);
             
             double maxPeek = 0.0;
 
@@ -239,19 +239,20 @@ namespace SignalAnalyzer
 
         public double[] SavitzkyGolayFilter2(double[] data, int n)
         {
-            double[] newData;
-            newData = new double[data.Length];
 
-            for (int i = 0; i < data.Length; i++)
-            {
-                for (int j = -n; j <= n; j++)
-                {
-                    if (i + j < 0 || i + j >= data.Length) newData[i] = data[i];
-                    else newData[i] += n * data[i + j];
-                }
-            }
-            return newData;
-        }
+             double[] newData;
+             newData = new double[data.Length];
+ 
+             for (int i = 0; i < data.Length; i++)
+             {
+                 for (int j = -n; j <= n; j++)
+                 {
+                     if (i + j < 0 || i + j > data.Length) newData[i] = data[i];
+                     else newData[i] += n * data[i + j];
+                 }
+             }
+             return newData;
+         }
 
         /**
          * BeetTimeDetection
