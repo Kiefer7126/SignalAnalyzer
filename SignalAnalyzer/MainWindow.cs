@@ -186,13 +186,14 @@ namespace SignalAnalyzer
                 beat = beatDetection.main(freqAnalyzer);
 
                 string noExtFileName = fileName.Replace(".wav", "");
+                noExtFileName = fileName.Replace("Pops", "20160111");
                 exportFile.WriteMetricalText(beat, noExtFileName + "_beat.txt");
                 
                 var beatStructure = new double[wavFile.RightData.Length];
                 metricalStruct = importFile.ReadMetric(noExtFileName + "_beat.txt");
                 beatStructure = generateWave.beat(wavFile, metricalStruct);
 
-                exportFile.WriteClick(beatStructure, noExtFileName + "_beat.Wav");
+                exportFile.WriteClick(beatStructure, noExtFileName + "_beat.wav");
 
                 Console.WriteLine("100個中"+ count + "個のデータを処理");
                 count++;
