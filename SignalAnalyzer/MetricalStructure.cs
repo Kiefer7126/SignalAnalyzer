@@ -49,7 +49,7 @@ namespace SignalAnalyzer
             var beatStructure = new int[wav.RightData.Length];
             int j = 0;
 
-            this.beatInterval = this.rightTime[1] - this.rightTime[0];
+            BeatInterval = this.rightTime[1] - this.rightTime[0];
 
             for (int i = 0; i < beatStructure.Length; i++)
             {

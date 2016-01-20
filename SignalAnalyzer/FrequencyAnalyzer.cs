@@ -79,6 +79,22 @@ namespace SignalAnalyzer
             return newStftData;
         }
 
+        //スペクトルを周波数方向に足し合わせる
+        public double[] sumSpectoroPower(double[][] oldStftdata)
+        {
+            var newStftData = new double[oldStftdata.Length];
+
+            for (int i = 0; i < newStftData.Length; i++)
+            {
+                for (int j = 0; j < windowLength; j++)
+                {
+                    newStftData[i] += Math.Abs(oldStftdata[i][j]);
+                }
+            }
+            return newStftData;
+        }
+
+        //隣接するbinの変化度を求める
         public int[] changeRatio(double[][] intervalStftData)
         {
             var changeRatioData = new int[intervalStftData.Length-1];

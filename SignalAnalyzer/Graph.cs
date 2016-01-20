@@ -184,33 +184,50 @@ namespace SignalAnalyzer
                 /*拍節構造の描画*/
                 if(metric != null)
                 {
-                    /*
+                   
                     for (int i = 0; i < metric.Length; i++)
                     {
                         g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
                     }
 
+                    var positiveStftData = new double[divStftData.Length][];
 
-                    for (int i = 0; i < divStftData.Length; i++)
+                    //正の値にマッピング
+                    for (int i = 0; i < positiveStftData.Length; i++)
                     {
-                        for (int j = 0; j < freq.windowLength; j++)
+                        double[] positiveStftFreq = Enumerable.Repeat(0.0, freq.windowLength).ToArray(); //すべて0で初期化
+
+                        for (int j = 0; j < positiveStftFreq.Length; j++)
                         {
-                            //時間軸で分割したスペクトルの描画
-                            g.DrawLine(Pens.Black, xZero + (beatInterval * i), yZero - j, xZero + (beatInterval * i) - (int)divStftData[i][j]/100, yZero - j);
+                            positiveStftFreq[j] = divStftData[i][j] + Math.Abs((int)divStftData[i].Min());
                         }
+                        positiveStftData[i] = positiveStftFreq;
                     }
 
-                    */
+                   for (int i = 0; i < divStftData.Length; i++)
+                   {
+                       for (int j = 0; j < freq.windowLength; j++)
+                       {
+                           //時間軸で分割したスペクトルの描画
+                          //g.DrawLine(Pens.Black, xZero + (beatInterval * (i+2)), yZero - j, xZero + (beatInterval * (i+2)) + (int)positiveStftData[i][j]/100, yZero - j);
+                       }
+                   }
 
-                    var changeRatioData = new int[divStftData.Length-1];
-                    changeRatioData = freq.changeRatio(divStftData);
 
-                    
+
+                   var changeRatioData = new int[positiveStftData.Length - 1];
+                   changeRatioData = freq.changeRatio(positiveStftData);
+
+                   var sumPower = freq.sumSpectoroPower(positiveStftData);
+
+                    var pen2 = new Pen(Color.FromArgb(0, 0, 0), penSize);
                     for (int i = 0; i < changeRatioData.Length; i++)
                     {
-                        g.DrawLine(Pens.Black, xZero + (beatInterval * i), yZero, xZero + (beatInterval * i), yZero - (int)(changeRatioData[i]/1000));
-
+                        g.DrawLine(pen2, xZero + (beatInterval * (i + 2)), yZero, xZero + (beatInterval * (i + 2)), yZero - (int)(changeRatioData[i] * 500 / sumPower[i]));
+                        //g.DrawLine(pen2, xZero + (beatInterval * (i + 2)), yZero, xZero + (beatInterval * (i + 2)), yZero - (int)(sumPower[i] / 15000));
                     }
+
+                   
                 }
 
                 //Graphicsリソース解放
