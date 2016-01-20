@@ -106,7 +106,7 @@ namespace SignalAnalyzer
             //PictureBoxの大きさが変更させるようにする
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length/4);
 
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0);
         }
 
         private void exMetricalWavMenu_Click(object sender, EventArgs e)
@@ -198,6 +198,37 @@ namespace SignalAnalyzer
                 Console.WriteLine("100個中"+ count + "個のデータを処理");
                 count++;
             }
+        }
+
+        private void buttonGPR_Click(object sender, EventArgs e)
+        {
+            /* read metric */
+            var importFile = new ImportFile();
+            //ファイルを選ぶときに使用
+            /*
+            string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
+            metricalStruct = importFile.ReadMetric(beatFileName);
+            
+            string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
+            wavFile = importFile.ReadAudioWav(fileName);
+            */
+
+            metricalStruct = importFile.ReadMetric("C:/Users/sawada/Desktop/AIST.RWC-MDB-C-2001.BEAT/RM-C002.BEAT.txt");
+            wavFile = importFile.ReadAudioWav("C:/Users/sawada/Desktop/02 Symphony no. 40 in G minor, K. 550. 1st mvmt-01.wav");
+            var freqAnalyzer = new FrequencyAnalyzer();
+            freqAnalyzer.STFT(wavFile.RightData);
+         
+
+            //スクロールバーが表示されるようにする
+            this.panel1.AutoScroll = true;
+
+            //PictureBoxの大きさが変更させるようにする
+            pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
+
+            //スペクトログラムの描画
+            var graph = new Graph();
+
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval);
         }
     }
 }

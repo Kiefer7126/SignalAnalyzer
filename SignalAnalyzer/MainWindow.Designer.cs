@@ -53,6 +53,7 @@
             this.beat = new System.Windows.Forms.Button();
             this.beatDetectionButton = new System.Windows.Forms.Button();
             this.experimentsButton = new System.Windows.Forms.Button();
+            this.buttonGPR = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -76,7 +77,7 @@
             this.importMenu,
             this.exportMenu});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // importMenu
@@ -85,7 +86,7 @@
             this.imAudioMenu,
             this.imMetricalMenu});
             this.importMenu.Name = "importMenu";
-            this.importMenu.Size = new System.Drawing.Size(109, 22);
+            this.importMenu.Size = new System.Drawing.Size(115, 22);
             this.importMenu.Text = "Import";
             // 
             // imAudioMenu
@@ -94,27 +95,27 @@
             this.imAudioTextMenu,
             this.imAudiowavMenu});
             this.imAudioMenu.Name = "imAudioMenu";
-            this.imAudioMenu.Size = new System.Drawing.Size(117, 22);
+            this.imAudioMenu.Size = new System.Drawing.Size(120, 22);
             this.imAudioMenu.Text = "Audio";
             // 
             // imAudioTextMenu
             // 
             this.imAudioTextMenu.Name = "imAudioTextMenu";
-            this.imAudioTextMenu.Size = new System.Drawing.Size(95, 22);
+            this.imAudioTextMenu.Size = new System.Drawing.Size(98, 22);
             this.imAudioTextMenu.Text = "text";
             this.imAudioTextMenu.Click += new System.EventHandler(this.imAudio_TextMenu_Click);
             // 
             // imAudiowavMenu
             // 
             this.imAudiowavMenu.Name = "imAudiowavMenu";
-            this.imAudiowavMenu.Size = new System.Drawing.Size(95, 22);
+            this.imAudiowavMenu.Size = new System.Drawing.Size(98, 22);
             this.imAudiowavMenu.Text = "wav";
             this.imAudiowavMenu.Click += new System.EventHandler(this.imAudio_wavMenu_Click);
             // 
             // imMetricalMenu
             // 
             this.imMetricalMenu.Name = "imMetricalMenu";
-            this.imMetricalMenu.Size = new System.Drawing.Size(117, 22);
+            this.imMetricalMenu.Size = new System.Drawing.Size(120, 22);
             this.imMetricalMenu.Text = "Metrical";
             this.imMetricalMenu.Click += new System.EventHandler(this.imMetricalMenu_Click);
             // 
@@ -124,7 +125,7 @@
             this.exAudioMenu,
             this.exMetricalMenu});
             this.exportMenu.Name = "exportMenu";
-            this.exportMenu.Size = new System.Drawing.Size(109, 22);
+            this.exportMenu.Size = new System.Drawing.Size(115, 22);
             this.exportMenu.Text = "Export";
             // 
             // exAudioMenu
@@ -132,13 +133,13 @@
             this.exAudioMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exAudioTextMenu});
             this.exAudioMenu.Name = "exAudioMenu";
-            this.exAudioMenu.Size = new System.Drawing.Size(117, 22);
+            this.exAudioMenu.Size = new System.Drawing.Size(120, 22);
             this.exAudioMenu.Text = "Audio";
             // 
             // exAudioTextMenu
             // 
             this.exAudioTextMenu.Name = "exAudioTextMenu";
-            this.exAudioTextMenu.Size = new System.Drawing.Size(94, 22);
+            this.exAudioTextMenu.Size = new System.Drawing.Size(98, 22);
             this.exAudioTextMenu.Text = "text";
             this.exAudioTextMenu.Click += new System.EventHandler(this.exAudio_TextMenu_Click);
             // 
@@ -148,19 +149,19 @@
             this.textToolStripMenuItem,
             this.exMetricalWavMenu});
             this.exMetricalMenu.Name = "exMetricalMenu";
-            this.exMetricalMenu.Size = new System.Drawing.Size(117, 22);
+            this.exMetricalMenu.Size = new System.Drawing.Size(120, 22);
             this.exMetricalMenu.Text = "Metrical";
             // 
             // textToolStripMenuItem
             // 
             this.textToolStripMenuItem.Name = "textToolStripMenuItem";
-            this.textToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.textToolStripMenuItem.Text = "text";
             // 
             // exMetricalWavMenu
             // 
             this.exMetricalWavMenu.Name = "exMetricalWavMenu";
-            this.exMetricalWavMenu.Size = new System.Drawing.Size(95, 22);
+            this.exMetricalWavMenu.Size = new System.Drawing.Size(98, 22);
             this.exMetricalWavMenu.Text = "wav";
             this.exMetricalWavMenu.Click += new System.EventHandler(this.exMetricalWavMenu_Click);
             // 
@@ -169,13 +170,13 @@
             this.analyzeMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.analyzeSTFTMenu});
             this.analyzeMenu.Name = "analyzeMenu";
-            this.analyzeMenu.Size = new System.Drawing.Size(60, 20);
+            this.analyzeMenu.Size = new System.Drawing.Size(64, 20);
             this.analyzeMenu.Text = "Analyze";
             // 
             // analyzeSTFTMenu
             // 
             this.analyzeSTFTMenu.Name = "analyzeSTFTMenu";
-            this.analyzeSTFTMenu.Size = new System.Drawing.Size(98, 22);
+            this.analyzeSTFTMenu.Size = new System.Drawing.Size(105, 22);
             this.analyzeSTFTMenu.Text = "STFT";
             this.analyzeSTFTMenu.Click += new System.EventHandler(this.analyzeSTFTMenu_Click);
             // 
@@ -252,11 +253,22 @@
             this.experimentsButton.UseVisualStyleBackColor = true;
             this.experimentsButton.Click += new System.EventHandler(this.experimentsButton_Click);
             // 
+            // buttonGPR
+            // 
+            this.buttonGPR.Location = new System.Drawing.Point(351, 41);
+            this.buttonGPR.Name = "buttonGPR";
+            this.buttonGPR.Size = new System.Drawing.Size(75, 23);
+            this.buttonGPR.TabIndex = 8;
+            this.buttonGPR.Text = "GPR";
+            this.buttonGPR.UseVisualStyleBackColor = true;
+            this.buttonGPR.Click += new System.EventHandler(this.buttonGPR_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 720);
+            this.Controls.Add(this.buttonGPR);
             this.Controls.Add(this.experimentsButton);
             this.Controls.Add(this.beatDetectionButton);
             this.Controls.Add(this.beat);
@@ -301,6 +313,7 @@
         private System.Windows.Forms.Button beat;
         private System.Windows.Forms.Button beatDetectionButton;
         private System.Windows.Forms.Button experimentsButton;
+        private System.Windows.Forms.Button buttonGPR;
     }
 }
 

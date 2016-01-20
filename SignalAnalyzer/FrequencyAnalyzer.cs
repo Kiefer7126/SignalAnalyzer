@@ -56,6 +56,45 @@ namespace SignalAnalyzer
             return windowLengthData;
         }
 
+        //beatInterval分スペクトルを時間軸方向に足し合わせる
+        public double[][] sumSpectoroInterval(MetricalStructure metric)
+        {
+            
+            var newStftData = new double[this.stftData.Length / metric.BeatInterval - 1][];
+            //var sumSpector = new double[windowLength];
+
+            for (int i = 0; i < newStftData.Length; i++)
+            {
+                double[] sumSpector = Enumerable.Repeat(0.0, windowLength).ToArray(); //すべて0で初期化
+
+                for(int j = 0; j < windowLength; j++)
+                {
+                    for (int k = metric.RightTime[i]; k < metric.RightTime[i + 1]; k++)
+                    {
+                        if(k < stftData.Length) sumSpector[j] += stftData[k][j];
+                    }
+                }
+                newStftData[i] = sumSpector;
+            }
+            return newStftData;
+        }
+
+        public int[] changeRatio(double[][] intervalStftData)
+        {
+            var changeRatioData = new int[intervalStftData.Length-1];
+            
+            for (int i = 0; i<changeRatioData.Length; i++)
+            {
+                for (int j = 0; j < windowLength; j++)
+                {
+                    if (intervalStftData[i+1] != null) changeRatioData[i] += Math.Abs((int)intervalStftData[i + 1][j] - (int)intervalStftData[i][j]);
+                }
+            }
+
+            return changeRatioData;
+
+        }
+
         private double[] FFT(double[] data)
         {
             //時間軸グラフに描画したデータからの実数と虚数部格納用

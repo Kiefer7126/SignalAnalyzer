@@ -82,7 +82,7 @@ namespace SignalAnalyzer
             chartcontrol.Series.Add(series);
         }
 
-        public void DrawSpectrogram(PictureBox picture, FrequencyAnalyzer freq)
+        public void DrawSpectrogram(PictureBox picture, FrequencyAnalyzer freq, int[] metric, double[][] divStftData, int beatInterval)
         {
             Console.WriteLine("Draw Spectrogram...");
             Graphics g;
@@ -167,16 +167,51 @@ namespace SignalAnalyzer
 
                 //y軸のラベル
                 g.DrawString(yLabel, myFont, Pens.Black.Brush, 5, gramHeight / 2);
-
+                
+                /* ビートを描画したいときに使用 */
+                /*
                 var beatDetection = new BeatDetection();
                 var beat = beatDetection.main(freq);
 
-                /* ピーク検出 */
-                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*20000));
+                //ピーク検出
+                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*20000));
 
-                /* 立ち上がり成分 */
-                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /50));
+                //立ち上がり成分
+                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /50));
                 
+                */
+
+                /*拍節構造の描画*/
+                if(metric != null)
+                {
+                    /*
+                    for (int i = 0; i < metric.Length; i++)
+                    {
+                        g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
+                    }
+
+
+                    for (int i = 0; i < divStftData.Length; i++)
+                    {
+                        for (int j = 0; j < freq.windowLength; j++)
+                        {
+                            //時間軸で分割したスペクトルの描画
+                            g.DrawLine(Pens.Black, xZero + (beatInterval * i), yZero - j, xZero + (beatInterval * i) - (int)divStftData[i][j]/100, yZero - j);
+                        }
+                    }
+
+                    */
+
+                    var changeRatioData = new int[divStftData.Length-1];
+                    changeRatioData = freq.changeRatio(divStftData);
+
+                    
+                    for (int i = 0; i < changeRatioData.Length; i++)
+                    {
+                        g.DrawLine(Pens.Black, xZero + (beatInterval * i), yZero, xZero + (beatInterval * i), yZero - (int)(changeRatioData[i]/1000));
+
+                    }
+                }
 
                 //Graphicsリソース解放
                 g.Dispose();

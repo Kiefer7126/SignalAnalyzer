@@ -15,9 +15,10 @@ namespace SignalAnalyzer
             //立ち上がり成分抽出
             double[] sumD = ExtractRisingComponent(freqAnalyzer.stftData, 0,20000, 44100);
 
+            
             //ピーク検出
             double[] peekTime = PeakDetection(sumD);
-
+            
             //ズレの検出
             int startTime = CalcStartTime(peekTime);
             Console.WriteLine(startTime);
@@ -36,7 +37,8 @@ namespace SignalAnalyzer
             //ビート系列の作成
             double[] beat = makeBeat(beatInterval, peekTime.Length, startTime);
             Console.WriteLine(peekTime.Length);
-
+           
+            
             return beat;
         }
 
@@ -121,13 +123,13 @@ namespace SignalAnalyzer
         public double[] PeakDetection(double[] data)
         {
 
-            var peekTime = SavitzkyGolayFilter2(data, 12);
+            var peekTime = SavitzkyGolayFilter(data, 5);
             
             double maxPeek = 0.0;
 
             for (int i = 0; i < peekTime.Length-1; i++)
             {
-                if (peekTime[i] > 0 && peekTime[i + 1] < 0)
+                if (peekTime[i] > 0 && peekTime[i + 1] < 0 || peekTime[i] < 0 && peekTime[i + 1] > 0)
                 {
                     if (maxPeek < peekTime[i]) maxPeek = peekTime[i];
                     peekTime[i] = peekTime[i] / maxPeek;
@@ -157,7 +159,8 @@ namespace SignalAnalyzer
             int[] W11 = { -36, 9, 44, 69, 84, 89, 84, 69, 44, 9, -36 };
             int[] W13 = { -11, 0, 9, 16, 21, 24, 25, 24, 21, 16, 9, 0, -11 };
             int[] W15 = { -78, -13, 42, 87, 122, 147, 162, 167, 162, 147, 122, 87, 42, -13, -78 };
-            int[] W17 = { -105, -30, 35, 90, 135, 170, 195, 210, 215, 210, 195, 170, 135, 90, 35, -30, -105};
+//            int[] W17 = { -105, -30, 35, 90, 135, 170, 195, 210, 215, 210, 195, 170, 135, 90, 35, -30, -105};
+            int[] W17 = { -21, -6, 7, 18, 27, 34, 39, 42, 43, 42, 39, 34, 27, 18, 7, -6, -21 };
             int[] W25 = { -253, -138, -33, 62, 147, 222, 287, 342, 387, 422, 447, 462, 467, 462, 447, 422, 387, 342, 287, 222, 147, 62, -33, -138, -253 };
 
             switch (smoothingNumber)
