@@ -13,12 +13,13 @@ namespace SignalAnalyzer
         public double[] main(FrequencyAnalyzer freqAnalyzer)
         {
             //立ち上がり成分抽出
-            double[] sumD = ExtractRisingComponent(freqAnalyzer.stftData, 0,20000, 44100);
+            double[] sumD = ExtractRisingComponent(freqAnalyzer.stftData, 0, 40000, 44100);
 
             
             //ピーク検出
-            double[] peekTime = PeakDetection(sumD);
+            double[] peekTime = PeakDetection2(sumD);
             
+            /*
             //ズレの検出
             int startTime = CalcStartTime(peekTime);
             Console.WriteLine(startTime);
@@ -37,9 +38,9 @@ namespace SignalAnalyzer
             //ビート系列の作成
             double[] beat = makeBeat(beatInterval, peekTime.Length, startTime);
             Console.WriteLine(peekTime.Length);
-           
-            
-            return beat;
+           */
+
+            return peekTime;
         }
 
         public int CalcStartTime(double[] data)
@@ -101,7 +102,7 @@ namespace SignalAnalyzer
             double[] sumD;
             sumD = new double[p.Length];
 
-            for (int t = 2; t < p.Length-1; t++)
+            for (int t = 2; t < p.Length - 1; t++)
             {
                 for (int f = 1; f < freqResolution; f++)
                 {
@@ -117,6 +118,8 @@ namespace SignalAnalyzer
                     sumD[t] += df[f];
                 }
             }
+
+            for (int i = 0; i < sumD.Length; i++) sumD[i] = sumD[i] / sumD.Max();
             return sumD;
         }
 
@@ -137,6 +140,37 @@ namespace SignalAnalyzer
                 else peekTime[i] = 0.0;
             }
             return peekTime;
+        }
+
+        public double[] PeakDetection2(double[] data)
+        {
+            var peak = new double[data.Length];
+            int peakInterval = 0;
+            int oldPeak = 0;
+
+            for (int i = 1; i < peak.Length-1; i++)
+            {
+                if (data[i] > Math.Max(data[i - 1], data[i + 1])) peak[i] = data[i];
+                else peak[i] = 0.0;
+            }
+
+            for (int i = 0; i < peak.Length; i++ )
+            {
+                if (peak[i] / peak.Max() > 0.05)
+                {
+                    peakInterval = i - oldPeak;
+         
+                    if (peakInterval > 16)
+                    {
+                        peak[i] = peak[i] / peak.Max();
+                        oldPeak = i;
+                    }
+                    else peak[i] = 0.0;
+                }
+                else peak[i] = 0.0;
+            }
+
+                return peak;
         }
 
         /**
@@ -305,7 +339,7 @@ namespace SignalAnalyzer
             beatInterval = mode;
 
             //妥当な時間内になるようにマージ
-            while (beatInterval < 32) beatInterval += mode;
+            while (beatInterval < 64) beatInterval += mode;
             
           return beatInterval;
         }

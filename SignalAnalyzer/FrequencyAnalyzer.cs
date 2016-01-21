@@ -13,7 +13,7 @@ namespace SignalAnalyzer
         public int windowLength = 2048;
         public double[][] stftData;
         public static double[] twiddleFactor;
-
+        public int focusFreqLength = 100;
         public void STFT(int[] data)
         {
             stftData = new double[data.Length / shiftLength][];
@@ -65,9 +65,9 @@ namespace SignalAnalyzer
 
             for (int i = 0; i < newStftData.Length; i++)
             {
-                double[] sumSpector = Enumerable.Repeat(0.0, windowLength).ToArray(); //すべて0で初期化
+                double[] sumSpector = Enumerable.Repeat(0.0, focusFreqLength).ToArray(); //すべて0で初期化
 
-                for(int j = 0; j < windowLength; j++)
+                for (int j = 0; j < focusFreqLength; j++)
                 {
                     for (int k = metric.RightTime[i]; k < metric.RightTime[i + 1]; k++)
                     {
@@ -86,7 +86,7 @@ namespace SignalAnalyzer
 
             for (int i = 0; i < newStftData.Length; i++)
             {
-                for (int j = 0; j < windowLength; j++)
+                for (int j = 0; j < focusFreqLength; j++)
                 {
                     newStftData[i] += Math.Abs(oldStftdata[i][j]);
                 }
@@ -101,14 +101,36 @@ namespace SignalAnalyzer
             
             for (int i = 0; i<changeRatioData.Length; i++)
             {
-                for (int j = 0; j < windowLength; j++)
+                for (int j = 0; j < focusFreqLength; j++)
                 {
-                    if (intervalStftData[i+1] != null) changeRatioData[i] += Math.Abs((int)intervalStftData[i + 1][j] - (int)intervalStftData[i][j]);
+                    if (i == 0) changeRatioData[i] = 0;
+                    else changeRatioData[i] += Math.Abs((int)intervalStftData[i][j] - (int)intervalStftData[i-1][j]);
+                    
                 }
             }
 
             return changeRatioData;
 
+        }
+
+        //ピークを検出
+        public double[][] peakDetection(double[][] intervalStftData)
+        {
+            var peakStftData = new double[intervalStftData.Length][];
+            
+            for (int i = 0; i < peakStftData.Length; i++)
+            {
+                double[] peakData = Enumerable.Repeat(0.0, focusFreqLength).ToArray(); //すべて0で初期化
+
+                for (int j = 1; j < focusFreqLength-1; j++)
+                {
+                    if (intervalStftData[i][j] > Math.Max(intervalStftData[i][j - 1], intervalStftData[i][j + 1])) peakData[j] = intervalStftData[i][j];
+                    else peakData[j] = 0.0;
+                }
+                peakStftData[i] = peakData;
+            }
+
+            return peakStftData;
         }
 
         private double[] FFT(double[] data)

@@ -205,6 +205,7 @@ namespace SignalAnalyzer
             /* read metric */
             var importFile = new ImportFile();
             //ファイルを選ぶときに使用
+            
             /*
             string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
             metricalStruct = importFile.ReadMetric(beatFileName);
@@ -213,8 +214,16 @@ namespace SignalAnalyzer
             wavFile = importFile.ReadAudioWav(fileName);
             */
 
+            
+            metricalStruct = importFile.ReadMetric("C:/Users/sawada/Desktop/AIST.RWC-MDB-P-2001.BEAT/RM-P001.BEAT.txt");
+            wavFile = importFile.ReadAudioWav("C:/Users/sawada/Desktop/01 永遠のレプリカedit2.wav");
+            
+            
+            /*
             metricalStruct = importFile.ReadMetric("C:/Users/sawada/Desktop/AIST.RWC-MDB-C-2001.BEAT/RM-C002.BEAT.txt");
             wavFile = importFile.ReadAudioWav("C:/Users/sawada/Desktop/02 Symphony no. 40 in G minor, K. 550. 1st mvmt-01.wav");
+            */
+
             var freqAnalyzer = new FrequencyAnalyzer();
             freqAnalyzer.STFT(wavFile.RightData);
          

@@ -106,6 +106,9 @@ namespace SignalAnalyzer
                 myFont = new Font("Arial", 9);
                 pen = new Pen(Color.FromArgb(0, 0, 0), penSize);
 
+                var pen2 = new Pen(Color.FromArgb(0, 0, 0), penSize);
+                var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
+
                 xLabel = "[ s ]";
                 yLabel = "[ kHz ]";
                 marginRight = 10;
@@ -169,61 +172,77 @@ namespace SignalAnalyzer
                 g.DrawString(yLabel, myFont, Pens.Black.Brush, 5, gramHeight / 2);
                 
                 /* ビートを描画したいときに使用 */
-                /*
+                
                 var beatDetection = new BeatDetection();
                 var beat = beatDetection.main(freq);
 
                 //ピーク検出
                 //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]*20000));
-
+                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] * 200));
                 //立ち上がり成分
-                for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i] /50));
+                //for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]/5));
                 
-                */
+                
 
                 /*拍節構造の描画*/
                 if(metric != null)
                 {
-                   
+                    /*
                     for (int i = 0; i < metric.Length; i++)
                     {
                         g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
                     }
-
+                    */
                     var positiveStftData = new double[divStftData.Length][];
+                    int[] minMatrix = Enumerable.Repeat(0, divStftData.Length).ToArray();
 
-                    //正の値にマッピング
-                    for (int i = 0; i < positiveStftData.Length; i++)
+                    for (int i = 0; i < minMatrix.Length; i++ )
                     {
-                        double[] positiveStftFreq = Enumerable.Repeat(0.0, freq.windowLength).ToArray(); //すべて0で初期化
-
-                        for (int j = 0; j < positiveStftFreq.Length; j++)
-                        {
-                            positiveStftFreq[j] = divStftData[i][j] + Math.Abs((int)divStftData[i].Min());
-                        }
-                        positiveStftData[i] = positiveStftFreq;
+                        minMatrix[i] = Math.Abs((int)divStftData[i].Min());
                     }
+
+                        //正の値にマッピング
+                    for (int i = 0; i < positiveStftData.Length; i++)
+                        {
+                            double[] positiveStftFreq = Enumerable.Repeat(0.0, freq.focusFreqLength).ToArray(); //すべて0で初期化
+
+                            for (int j = 0; j < positiveStftFreq.Length; j++)
+                            {
+                                positiveStftFreq[j] = divStftData[i][j] + minMatrix.Max(); //最小値の絶対値の最大値
+                            }
+                            positiveStftData[i] = positiveStftFreq;
+                        }
+
+                    var peakStftData = freq.peakDetection(positiveStftData);
 
                    for (int i = 0; i < divStftData.Length; i++)
                    {
-                       for (int j = 0; j < freq.windowLength; j++)
+                       for (int j = 0; j < freq.focusFreqLength; j++)
                        {
                            //時間軸で分割したスペクトルの描画
-                          //g.DrawLine(Pens.Black, xZero + (beatInterval * (i+2)), yZero - j, xZero + (beatInterval * (i+2)) + (int)positiveStftData[i][j]/100, yZero - j);
+                          //g.DrawLine(Pens.Black, xZero + (beatInterval * (i)), yZero - j, xZero + (beatInterval * (i)) + (int)positiveStftData[i][j]/100, yZero - j);
+
+                          //時間軸で分割したスペクトルのピークの描画
+                          //g.DrawLine(Pens.Black, xZero + (beatInterval * (i)), yZero - j, xZero + (beatInterval * (i)) + (int)peakStftData[i][j] / 100, yZero - j);
                        }
                    }
 
-
+                   int changeRatio = 0;
 
                    var changeRatioData = new int[positiveStftData.Length - 1];
-                   changeRatioData = freq.changeRatio(positiveStftData);
+                   changeRatioData = freq.changeRatio(peakStftData);
 
                    var sumPower = freq.sumSpectoroPower(positiveStftData);
 
-                    var pen2 = new Pen(Color.FromArgb(0, 0, 0), penSize);
                     for (int i = 0; i < changeRatioData.Length; i++)
                     {
-                        g.DrawLine(pen2, xZero + (beatInterval * (i + 2)), yZero, xZero + (beatInterval * (i + 2)), yZero - (int)(changeRatioData[i] * 500 / sumPower[i]));
+                        //changeRatio = (int)(changeRatioData[i] * 500 /((sumPower[i]+sumPower[i+1])/2));
+                        //changeRatio = (int)(changeRatioData[i] * 500 / sumPower[i]);
+                        //changeRatio = (int)(changeRatioData[i] / 5000);
+                        changeRatio = (int)(changeRatioData[i]/500);
+
+                        //if (changeRatio > 210) g.DrawLine(boundaryPen, xZero + (beatInterval * (i) + 10), yZero, xZero + (beatInterval * (i) + 10), yMax); //グルーピング協会
+                        //g.DrawLine(pen2, xZero + (beatInterval * (i)), yZero, xZero + (beatInterval * (i )), yZero - changeRatio);
                         //g.DrawLine(pen2, xZero + (beatInterval * (i + 2)), yZero, xZero + (beatInterval * (i + 2)), yZero - (int)(sumPower[i] / 15000));
                     }
 
