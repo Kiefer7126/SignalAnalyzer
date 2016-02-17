@@ -175,12 +175,31 @@ namespace SignalAnalyzer
                             wavFile.bitPerSampling = br.ReadUInt16();
                             
                             //拡張部分
-                            if(wavFile.fmtSize > 16) for(int i = 0; i < (wavFile.fmtSize - 16)/2; i++) br.ReadUInt16();
+                            //if(wavFile.fmtSize > 16) for(int i = 0; i < (wavFile.fmtSize - 16)/2; i++) br.ReadUInt16();
 
-                            wavFile.dataID = br.ReadBytes(4);
+                            string headerChar2;
+                            for (int j = 0; j < br.BaseStream.Length; j++)
+                            {
+                                headerChar2 = System.Text.Encoding.ASCII.GetString(br.ReadBytes(1));
+                                if (headerChar2.ToLower() == "d")
+                                {
+                                    headerChar2 = System.Text.Encoding.ASCII.GetString(br.ReadBytes(1));
+                                    if (headerChar2.ToLower() == "a")
+                                    {
+                                        headerChar2 = System.Text.Encoding.ASCII.GetString(br.ReadBytes(1));
+                                        if (headerChar2.ToLower() == "t")
+                                        {
+                                            br.ReadBytes(1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            wavFile.dataID = System.Text.Encoding.ASCII.GetBytes("data");
+                            //wavFile.dataID = br.ReadBytes(4);
                             wavFile.dataSize = br.ReadUInt32();
 
-                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize; //4分の1サイズ
+                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize / 8; //4分の1サイズ
 
                             int[] rightDataArray = new int[dataArrayLength];
                             int[] leftDataArray = new int[dataArrayLength];

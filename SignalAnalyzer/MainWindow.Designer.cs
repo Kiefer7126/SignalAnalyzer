@@ -54,6 +54,7 @@
             this.beatDetectionButton = new System.Windows.Forms.Button();
             this.experimentsButton = new System.Windows.Forms.Button();
             this.buttonGPR = new System.Windows.Forms.Button();
+            this.beatEval = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -263,11 +264,22 @@
             this.buttonGPR.UseVisualStyleBackColor = true;
             this.buttonGPR.Click += new System.EventHandler(this.buttonGPR_Click);
             // 
+            // beatEval
+            // 
+            this.beatEval.Location = new System.Drawing.Point(433, 41);
+            this.beatEval.Name = "beatEval";
+            this.beatEval.Size = new System.Drawing.Size(75, 23);
+            this.beatEval.TabIndex = 9;
+            this.beatEval.Text = "beatEval";
+            this.beatEval.UseVisualStyleBackColor = true;
+            this.beatEval.Click += new System.EventHandler(this.beatEval_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 720);
+            this.Controls.Add(this.beatEval);
             this.Controls.Add(this.buttonGPR);
             this.Controls.Add(this.experimentsButton);
             this.Controls.Add(this.beatDetectionButton);
@@ -314,6 +326,7 @@
         private System.Windows.Forms.Button beatDetectionButton;
         private System.Windows.Forms.Button experimentsButton;
         private System.Windows.Forms.Button buttonGPR;
+        private System.Windows.Forms.Button beatEval;
     }
 }
 

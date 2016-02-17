@@ -9,11 +9,13 @@ namespace SignalAnalyzer
     public class FrequencyAnalyzer
     {
         private double[] reData, imData;
+        //public int shiftLength = 441;
+        //public int windowLength = 2048;
         public int shiftLength = 441;
         public int windowLength = 2048;
         public double[][] stftData;
         public static double[] twiddleFactor;
-        public int focusFreqLength = 100;
+        public int focusFreqLength = 50;
         public void STFT(int[] data)
         {
             stftData = new double[data.Length / shiftLength][];
@@ -60,9 +62,12 @@ namespace SignalAnalyzer
         public double[][] sumSpectoroInterval(MetricalStructure metric)
         {
             
-            var newStftData = new double[this.stftData.Length / metric.BeatInterval - 1][];
+            //var newStftData = new double[this.stftData.Length/ metric.BeatInterval - 1][];
+            var newStftData = new double[metric.RightTime.Length-1][];
+            
             //var sumSpector = new double[windowLength];
 
+           // for (int i = 0; i < newStftData.Length; i++)
             for (int i = 0; i < newStftData.Length; i++)
             {
                 double[] sumSpector = Enumerable.Repeat(0.0, focusFreqLength).ToArray(); //すべて0で初期化
@@ -70,6 +75,7 @@ namespace SignalAnalyzer
                 for (int j = 0; j < focusFreqLength; j++)
                 {
                     for (int k = metric.RightTime[i]; k < metric.RightTime[i + 1]; k++)
+                       // for (int k = metric.RightTime[i] / 2 + 5; k < metric.RightTime[i + 1] / 2 - 5; k++)
                     {
                         if(k < stftData.Length) sumSpector[j] += stftData[k][j];
                     }
@@ -164,7 +170,6 @@ namespace SignalAnalyzer
 
             return dBData;
         }
-
 
         private void CalcButterfly(double[] data)
         {

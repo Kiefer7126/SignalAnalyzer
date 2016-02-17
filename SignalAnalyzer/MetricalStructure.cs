@@ -49,13 +49,14 @@ namespace SignalAnalyzer
             var beatStructure = new int[wav.RightData.Length];
             int j = 0;
 
-            BeatInterval = this.rightTime[1] - this.rightTime[0];
+            //BeatInterval = this.rightTime[1] - this.rightTime[0];
 
             for (int i = 0; i < beatStructure.Length; i++)
             {
                 //if (i / 441 == this.RightTime[j]) //振幅
                 if (i == this.RightTime[j]) //スペクトログラム(i: 4分音符レベル)
                 {
+                    BeatInterval = this.rightTime[1] - this.rightTime[0];
                     beatStructure[i] = this.Ticks[j];
                     //Console.WriteLine(this.Ticks[j]);
 

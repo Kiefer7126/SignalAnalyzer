@@ -13,36 +13,44 @@ namespace SignalAnalyzer
         public double[] main(FrequencyAnalyzer freqAnalyzer)
         {
             //立ち上がり成分抽出
-            double[] sumD = ExtractRisingComponent(freqAnalyzer.stftData, 0, 40000, 44100);
-
+            double[] sumD = ExtractRisingComponent(freqAnalyzer.stftData, 0, 1000, 44100);
+            
             
             //ピーク検出
             double[] peekTime = PeakDetection2(sumD);
+
+         
+           //自己相関
+           double[] R = CalcAutocorrelation(peekTime, peekTime);
             
+           //ピーク検出
+           peekTime = PeakDetection2(R);
+           //foreach(var item in peekTime) Console.WriteLine(item);
+          
             /*
-            //ズレの検出
-            int startTime = CalcStartTime(peekTime);
-            Console.WriteLine(startTime);
+           //ズレの検出
+           int startTime = CalcStartTime(peekTime);
+           Console.WriteLine("startTime = " + startTime);
+            */
 
-            //自己相関
-            double[] R = CalcAutocorrelation(peekTime, peekTime);
-            
-            //ピーク検出
-            peekTime = PeakDetection(R);
-            //foreach(var item in peekTime) Console.WriteLine(item);
-
-            //ビート間隔
-            int beatInterval = CalcBeatInterval(peekTime);
-            Console.WriteLine(beatInterval);
+           //ビート間隔
+            int beatInterval = CalcBeatInterval(peekTime) ;
+            Console.WriteLine("beatInterval = " + beatInterval);
 
             //ビート系列の作成
-            double[] beat = makeBeat(beatInterval, peekTime.Length, startTime);
+            double[] beat = makeBeat(beatInterval, peekTime.Length, 0);
             Console.WriteLine(peekTime.Length);
-           */
 
-            return peekTime;
+
+            return beat;
         }
 
+        /**
+         * CalcStartTime
+         * 概要：startTimeを求める
+         * @param data startTimeを求める対象データ
+         * @return startTime
+         */
         public int CalcStartTime(double[] data)
         {
             int startTime = 0;
@@ -64,6 +72,7 @@ namespace SignalAnalyzer
          * @param dataLen 対象データの大きさ
          * @return R[] 自己相関配列
          */
+
         public double[] CalcAutocorrelation(double[] data1, double[] data2)
         {
             double[] R = new double[data1.Length];
@@ -71,8 +80,10 @@ namespace SignalAnalyzer
             for (int j = 0; j < data1.Length; j++)
             {
                 for (int i = 0; i < data1.Length - j; i++) R[j] += data1[i] * data2[i + j];
-                R[j] = R[j] / (data1.Length - j);
+               // R[j] = R[j] / (data1.Length - j);
             }
+
+            for (int i = 0; i < R.Length; i++) R[i] = R[i] / R.Max();
             return R;
         }
 
@@ -84,6 +95,7 @@ namespace SignalAnalyzer
          * @param freqBand
          * @return p[t,f] パワーが増加し続けている周波数成分
          */
+
         public double[] ExtractRisingComponent(double[][] p, int freqFrom, int freqTo, int samplingFreq)
         {
 
@@ -123,9 +135,15 @@ namespace SignalAnalyzer
             return sumD;
         }
 
+        /**
+         * PeakDetection
+         * 概要：SavitzkyGolayの平滑化微分を用いたピークの検出
+         * @param data ピークを検出する対象データ
+         * @return　peekTime
+         */
+
         public double[] PeakDetection(double[] data)
         {
-
             var peekTime = SavitzkyGolayFilter(data, 5);
             
             double maxPeek = 0.0;
@@ -142,6 +160,13 @@ namespace SignalAnalyzer
             return peekTime;
         }
 
+        /**
+         * PeakDetection2
+         * 概要：平滑化を用いないピーク検出
+         * @param data ピークを検出する対象データ
+         * @return　peak
+         */
+
         public double[] PeakDetection2(double[] data)
         {
             var peak = new double[data.Length];
@@ -150,17 +175,18 @@ namespace SignalAnalyzer
 
             for (int i = 1; i < peak.Length-1; i++)
             {
-                if (data[i] > Math.Max(data[i - 1], data[i + 1])) peak[i] = data[i];
+                if (data[i] >= Math.Max(data[i - 1], data[i + 1])) peak[i] = data[i];
                 else peak[i] = 0.0;
             }
 
             for (int i = 0; i < peak.Length; i++ )
             {
-                if (peak[i] / peak.Max() > 0.05)
+                if (peak[i] / peak.Max() > 0.1)
+                    //if (peak[i] / peak.Max() > 0.13)
                 {
                     peakInterval = i - oldPeak;
          
-                    if (peakInterval > 16)
+                    if (peakInterval > 8)
                     {
                         peak[i] = peak[i] / peak.Max();
                         oldPeak = i;
@@ -169,18 +195,18 @@ namespace SignalAnalyzer
                 }
                 else peak[i] = 0.0;
             }
-
                 return peak;
         }
 
         /**
-       * SavitzkyGolayFilter
-       * 概要：2次多項式適合による平滑化微分
-       * @param data            平滑化する対象データ
-       * @param smoothingNumber 平常化の時間幅
-       * @param dataLen         対象データの長さ
-       * @return newData        平滑化後のデータ
-       */
+         * SavitzkyGolayFilter
+         * 概要：2次多項式適合による平滑化微分
+         * @param data            平滑化する対象データ
+         * @param smoothingNumber 平常化の時間幅
+         * @param dataLen         対象データの長さ
+         * @return newData        平滑化後のデータ
+         */
+
         public double[] SavitzkyGolayFilter(double[] data, int smoothingNumber)
         {
             double[] newData;
@@ -276,7 +302,6 @@ namespace SignalAnalyzer
 
         public double[] SavitzkyGolayFilter2(double[] data, int n)
         {
-
              double[] newData;
              newData = new double[data.Length];
  
@@ -309,7 +334,7 @@ namespace SignalAnalyzer
             //ビート間隔を格納
             for (int i = 0; i < data.Length; i++) 
             {
-                if (data[i] > 0.0)
+                if (data[i] > 0.75)
                 {
                     beatInterval = i - oldBeet;
                         oldBeet = i;
@@ -339,7 +364,7 @@ namespace SignalAnalyzer
             beatInterval = mode;
 
             //妥当な時間内になるようにマージ
-            while (beatInterval < 64) beatInterval += mode;
+            //while (beatInterval < 64) beatInterval += mode;
             
           return beatInterval;
         }
