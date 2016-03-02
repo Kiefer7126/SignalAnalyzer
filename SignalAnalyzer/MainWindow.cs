@@ -22,6 +22,10 @@ namespace SignalAnalyzer
             InitializeComponent();
             wavFile = new WavFile();
             metricalStruct = new MetricalStructure();
+
+            allProgressBar.Minimum = 0;
+            allProgressBar.Maximum = 3; //処理の数
+            allProgressBar.Value = 0;
         }
 
         /**
@@ -94,7 +98,7 @@ namespace SignalAnalyzer
         private void analyzeSTFTMenu_Click(object sender, EventArgs e)
         {
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
             //スクロールバーが表示されるようにする
             this.panel1.AutoScroll = true;
@@ -103,7 +107,7 @@ namespace SignalAnalyzer
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
             var graph = new Graph();
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0, this.progressBar);
         }
 
         /**
@@ -120,9 +124,11 @@ namespace SignalAnalyzer
             wavFile = importFile.ReadAudioWav(fileName);
             var graph = new Graph();
             graph.draw(this.chartcontrol, wavFile.RightData);
+            allProgressBar.Value = 1;
 
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
+            allProgressBar.Value = 2;
 
             //スクロールバーが表示されるようにする
             this.panel1.AutoScroll = true;
@@ -130,7 +136,8 @@ namespace SignalAnalyzer
             //PictureBoxの大きさが変更させるようにする
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0, this.progressBar);
+            allProgressBar.Value = 3;
         }
 
         /**
@@ -194,7 +201,7 @@ namespace SignalAnalyzer
             wavFile = importFile.ReadAudioWav(fileName);
 
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
             var beatDetection = new BeatDetection();
             var beat = new double[freqAnalyzer.stftData.Length];
@@ -230,7 +237,7 @@ namespace SignalAnalyzer
             {
                 wavFile = importFile.ReadAudioWav(fileName);
 
-                freqAnalyzer.STFT(wavFile.RightData);
+                freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
                 var beat = new double[freqAnalyzer.stftData.Length];
                 beat = beatDetection.main(freqAnalyzer);
@@ -284,7 +291,7 @@ namespace SignalAnalyzer
         */
 
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
 
             //スクロールバーが表示されるようにする
@@ -296,7 +303,7 @@ namespace SignalAnalyzer
             //スペクトログラムの描画
             var graph = new Graph();
 
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval, this.progressBar);
         }
 
         /**

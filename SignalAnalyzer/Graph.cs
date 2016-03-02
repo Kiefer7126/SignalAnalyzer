@@ -13,10 +13,16 @@ namespace SignalAnalyzer
     public class Graph
     {
 
-        private int plotData;
-        private int red;
-        private int green;
-        private int blue;
+        private int plotData, red, green, blue;
+
+        private int xZero, yZero, xMax, yMax, marginRight, marginLeft, marginTop, marginBottom, gramWidth, gramHeight;
+        private Graphics g;
+        private Font myFont;
+        private Pen spectrogramPen;
+        private int penSize;
+
+        private float xStep, yStep, dataMax, dataMin;
+        private String xLabel, yLabel;
 
         public void draw(Chart chartcontrol, int[] data)
         {
@@ -83,53 +89,82 @@ namespace SignalAnalyzer
             chartcontrol.Series.Add(series);
         }
 
-        public void DrawSpectrogram(PictureBox picture, FrequencyAnalyzer freq, int[] metric, double[][] divStftData, int beatInterval)
+        /**
+         * initSpectrogram
+         * 概要：スペクトログラムの初期化
+         * @param なし
+         * @return なし
+         */
+
+        public void initSpectrogram(PictureBox picture)
         {
             Console.WriteLine("Draw Spectrogram...");
-            Graphics g;
-            Font myFont;
-            Pen pen;
-            int xZero, yZero, xMax, yMax, marginRight, marginLeft, marginTop, marginBottom, gramWidth, gramHeight;
 
-            int penSize = 5; //太くすると周波数が少ないときでも隙間なく描画される
-            float xStep, yStep;
-            float dataMax = 0;
-            float dataMin = 0;
+            penSize = 5; 
+            xStep = 1;
+            yStep = 1;
 
-            String xLabel = "";
-            String yLabel = "";
+            dataMax = 0;
+            dataMin = 0;
 
+            xLabel = "";
+            yLabel = "";
+
+            xLabel = "[ s ]";
+            yLabel = "[ kHz ]";
+
+            marginRight = 10;
+            marginLeft = 65;
+            marginTop = 10;
+            marginBottom = 40;
+
+            gramWidth = picture.Width - (marginRight + marginLeft);
+            gramHeight = picture.Height - (marginTop + marginBottom);
+
+            xZero = marginLeft;
+            yZero = picture.Height - marginBottom;
+            xMax = picture.Width - marginRight;
+            yMax = marginTop;
+
+
+        }
+        public void drawAxis(Graphics g, PictureBox picture)
+        {
+            g.DrawString("0", myFont, Pens.Black.Brush, 0, picture.Width - 2); //原点
+            g.DrawLine(Pens.Black, xZero, yZero, xMax, yZero); // x軸
+            g.DrawLine(Pens.Black, xZero, yZero, xZero, yMax); // y軸
+
+            //x軸のラベル
+            g.DrawString(xLabel, myFont, Pens.Black.Brush, picture.Width / 2, yZero + (marginBottom / 2));
+
+            //y軸のラベル
+            g.DrawString(yLabel, myFont, Pens.Black.Brush, 5, gramHeight / 2);
+        }
+
+        public void DrawSpectrogram(PictureBox picture, FrequencyAnalyzer freq, int[] metric, double[][] divStftData, int beatInterval, ProgressBar progressBar)
+        {
+            initSpectrogram(picture);
+
+
+            progressBar.Minimum = 0;
+            progressBar.Maximum = freq.stftData.Length;
+            progressBar.Value = 0;
             try
             {
                 picture.Refresh();
                 picture.Image = new Bitmap(picture.Width, picture.Height);
                 g = Graphics.FromImage(picture.Image);
                 myFont = new Font("Arial", 9);
-                pen = new Pen(Color.FromArgb(0, 0, 0), penSize);
+                spectrogramPen = new Pen(Color.FromArgb(0, 0, 0), penSize);
 
                 var pen2 = new Pen(Color.FromArgb(0, 0, 0), penSize);
                 var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
 
-                xLabel = "[ s ]";
-                yLabel = "[ kHz ]";
-                marginRight = 10;
-                marginLeft = 65;
-                marginTop = 10;
-                marginBottom = 40;
-                gramWidth = picture.Width - (marginRight + marginLeft);
-                gramHeight = picture.Height - (marginTop + marginBottom);
-
-                xZero = marginLeft;
-                yZero = picture.Height - marginBottom;
-                xMax = picture.Width - marginRight;
-                yMax = marginTop;
-
-                //xStep = (float)gramWidth / (float)(freq.stftData.Length - 2);
-                xStep = 1;
-                yStep = 1;
-                //yStep = System.Math.Abs((float)gramHeight / (freq.stftData[0].Length/4));
-
                 //グラフの描画
+
+                float bottomUp, dataIntervalNomalization;
+                float penSizeHalf = penSize / 2;
+                float inverseSTFTLength = (float)(1.0 / freq.stftData.Length);
 
                 for (int time = 1; time < freq.stftData.Length - 1; time++)
                 {
@@ -139,39 +174,31 @@ namespace SignalAnalyzer
                         if (dataMin > freq.stftData[time][i]) dataMin = (float)freq.stftData[time][i];
                     }
 
+                    dataIntervalNomalization = 1 / (dataMax - dataMin);
+                    bottomUp = System.Math.Abs(dataMin);
+
                     for (int i = 0; i < freq.stftData[0].Length / 4; i++)
                     {
-                        float bottomUp = System.Math.Abs(dataMin);
-
-                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 5 / (dataMax - dataMin));
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 5 * dataIntervalNomalization);
                         ToHsv(plotData);
 
                         /* color */
-                        pen.Color = Color.FromArgb(red, green, blue);
+                        spectrogramPen.Color = Color.FromArgb(red, green, blue);
 
                         /* monochrome */
                         //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
 
-
-                        g.DrawLine(pen,
+                        g.DrawLine(spectrogramPen,
                              (float)(xZero + xStep * (time - 1)),
-                             (float)(yZero - i * yStep - penSize / 2),
+                             (float)(yZero - i * yStep - penSizeHalf),
                              (float)(xZero + xStep * (time)),
-                             (float)(yZero - i * yStep - penSize / 2));
+                             (float)(yZero - i * yStep - penSizeHalf));
                     }
-                    if (time % 100 == 0) Console.Write(string.Format("{0, 3:d0}% \r", 100 * time / freq.stftData.Length));
+                    progressBar.Value = time;
                 }
 
-                g.DrawString("0", myFont, Pens.Black.Brush, 0, picture.Width - 2); //原点
-                g.DrawLine(Pens.Black, xZero, yZero, xMax, yZero); // x軸
-                g.DrawLine(Pens.Black, xZero, yZero, xZero, yMax); // y軸
-
-                //x軸のラベル
-                g.DrawString(xLabel, myFont, Pens.Black.Brush, picture.Width / 2, yZero + (marginBottom / 2));
-
-                //y軸のラベル
-                g.DrawString(yLabel, myFont, Pens.Black.Brush, 5, gramHeight / 2);
-                
+                drawAxis(g, picture);
+     
                 /* ビートを描画したいときに使用 */
                 
                 var beatDetection = new BeatDetection();
@@ -183,18 +210,13 @@ namespace SignalAnalyzer
                 //立ち上がり成分
                // for (int i = 0; i < beat.Length; i++) g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - (int)(beat[i]/5));
                 
-                
-
                 /*拍節構造の描画*/
                 if(metric != null)
                 {
-                    beatInterval = beatInterval;
-
                     for (int i = 0; i < metric.Length; i++)
                     {
                         //g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
                     }
-
 
                     var positiveStftData = new double[divStftData.Length][];
                     int[] minMatrix = Enumerable.Repeat(0, divStftData.Length).ToArray();
@@ -342,8 +364,6 @@ namespace SignalAnalyzer
                     {
                         g.DrawLine(pen2, xZero + beatInterval * i , yZero, xZero + beatInterval * i , yZero - (int)(groupingBoundary[i] * 200)); 
                     }
-
-
                 }
 
                 //Graphicsリソース解放

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,6 +55,8 @@
             this.experimentsButton = new System.Windows.Forms.Button();
             this.buttonGPR = new System.Windows.Forms.Button();
             this.beatEval = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.allProgressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -183,16 +185,16 @@
             // 
             // chartcontrol
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartcontrol.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartcontrol.Legends.Add(legend1);
+            chartArea6.Name = "ChartArea1";
+            this.chartcontrol.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chartcontrol.Legends.Add(legend6);
             this.chartcontrol.Location = new System.Drawing.Point(12, 580);
             this.chartcontrol.Name = "chartcontrol";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartcontrol.Series.Add(series1);
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chartcontrol.Series.Add(series6);
             this.chartcontrol.Size = new System.Drawing.Size(1230, 128);
             this.chartcontrol.TabIndex = 1;
             this.chartcontrol.Text = "chart1";
@@ -274,11 +276,27 @@
             this.beatEval.UseVisualStyleBackColor = true;
             this.beatEval.Click += new System.EventHandler(this.beatEval_Click);
             // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(514, 51);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(245, 12);
+            this.progressBar.TabIndex = 10;
+            // 
+            // allProgressBar
+            // 
+            this.allProgressBar.Location = new System.Drawing.Point(514, 29);
+            this.allProgressBar.Name = "allProgressBar";
+            this.allProgressBar.Size = new System.Drawing.Size(245, 19);
+            this.allProgressBar.TabIndex = 11;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 720);
+            this.Controls.Add(this.allProgressBar);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.beatEval);
             this.Controls.Add(this.buttonGPR);
             this.Controls.Add(this.experimentsButton);
@@ -327,6 +345,8 @@
         private System.Windows.Forms.Button experimentsButton;
         private System.Windows.Forms.Button buttonGPR;
         private System.Windows.Forms.Button beatEval;
+        private System.Windows.Forms.ProgressBar allProgressBar;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 
