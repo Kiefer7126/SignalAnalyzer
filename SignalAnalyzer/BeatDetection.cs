@@ -42,7 +42,7 @@ namespace SignalAnalyzer
             Console.WriteLine(peekTime.Length);
 
 
-            return sumD;
+            return beat;
         }
 
         /**

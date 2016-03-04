@@ -23,6 +23,22 @@ namespace SignalAnalyzer
         private float xStep, yStep, dataMax, dataMin;
         private String xLabel, yLabel;
 
+        private double[] groupingBoundary, groupingBoundary2, gpr2a, gpr2b, gpr3, gpr5;
+        private int beatInterval;
+        private int maxIndex;
+
+        private List<int> maxIndexList;
+
+        public List<int> getMaxIndexList()
+        {
+            return maxIndexList;
+        }
+
+        public int getMaxIndex()
+        {
+            return maxIndex;
+        }
+            
         public void draw(Chart chartcontrol, int[] data)
         {
             //軸ラベルの設定
@@ -207,12 +223,15 @@ namespace SignalAnalyzer
 
                 drawAxis(g, picture);
 
+                picture.Image.Save("C:/Users/sawada/Desktop/test.bmp");
+
                 var beatDetection = new BeatDetection();
                 var beat = beatDetection.main(freq);
 
                 //drawBeatComponent(freq, g, beat);
 
                 if (metric != null) drawMetricStructure(g, metric, divStftData, freq, beatInterval, beat);
+                this.beatInterval = beatInterval;
 
                 //Graphicsリソース解放
                 g.Dispose();
@@ -230,7 +249,7 @@ namespace SignalAnalyzer
 
             for (int i = 0; i < metric.Length; i++)
             {
-                //g.DrawLine(Pens.Black, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
+                g.DrawLine(Pens.Blue, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
             }
 
             var positiveStftData = new double[divStftData.Length][];
@@ -282,12 +301,12 @@ namespace SignalAnalyzer
                 changeRatio = (int)(changeRatioData[i] / 300);
 
                 //if (changeRatio > 210) g.DrawLine(boundaryPen, xZero + (beatInterval * (i) + 10), yZero, xZero + (beatInterval * (i) + 10), yMax); //グルーピング協会
-                g.DrawLine(metricPen, xZero + (beatInterval) * (i) + 10, yMax, xZero + (beatInterval) * (i) + 10, yMax + changeRatio);
-                g.DrawLine(metricPen, xZero + (beatInterval * (i) + 10), yMax + 100, xZero + (beatInterval * (i) + 10), yMax + 100 + (int)(sumPower[i] / 500));
+ //               g.DrawLine(metricPen, xZero + (beatInterval) * (i) + 10, yMax, xZero + (beatInterval) * (i) + 10, yMax + changeRatio);
+ //               g.DrawLine(metricPen, xZero + (beatInterval * (i) + 10), yMax + 100, xZero + (beatInterval * (i) + 10), yMax + 100 + (int)(sumPower[i] / 500));
             }
 
 
-            var gpr2a = new double[sumPower.Length];
+            gpr2a = new double[sumPower.Length];
 
             gpr2a[0] = 0;
 
@@ -320,7 +339,7 @@ namespace SignalAnalyzer
                 }
             }
 
-            var gpr2b = new double[beatIntervalArray.Count];
+            gpr2b = new double[beatIntervalArray.Count];
 
             gpr2b[0] = 0;
 
@@ -338,7 +357,7 @@ namespace SignalAnalyzer
                 x += (int)beatIntervalArray[i + 1];
             }
 
-            var gpr3 = new double[changeRatioData.Length + 1];
+            gpr3 = new double[changeRatioData.Length + 1];
 
             gpr3[0] = 0;
 
@@ -347,7 +366,7 @@ namespace SignalAnalyzer
                 gpr3[i] = (double)changeRatioData[i - 1] / (double)changeRatioData.Max();
             }
 
-            var gpr5 = new double[sumPower.Length];
+            gpr5 = new double[sumPower.Length];
 
             for (int i = 0; i < gpr5.Length; i++)
             {
@@ -364,21 +383,93 @@ namespace SignalAnalyzer
             double s2a = 1.0;
             double s2b = 1.0;
             double s3 = 0.2;
-            var groupingBoundary = new double[sumPower.Length];
+
+            groupingBoundary = new double[sumPower.Length];
+            groupingBoundary2 = new double[sumPower.Length];
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
-                groupingBoundary[i] = gpr2a[i] * s2a +/* gpr2b[i] * s2b + */gpr3[i] * s3;
+                groupingBoundary[i] = gpr2a[i] * s2a + gpr2b[i] * s2b + gpr3[i] * s3;
             }
 
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
                 groupingBoundary[i] = groupingBoundary[i] * gpr5[i] / groupingBoundary.Max();
+                //groupingBoundary[i] = groupingBoundary[i] * Math.Sin(Math.PI * i / groupingBoundary.Length) / groupingBoundary.Max();
             }
 
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
                 g.DrawLine(metricPen, xZero + beatInterval * i, yZero, xZero + beatInterval * i, yZero - (int)(groupingBoundary[i] * 200));
             }
+        }
+
+
+        int[] maxIndexArray = new int[3];
+        double[][] gpr5Array = new double[3][];
+        double[] groupingArray3;
+        public void drawGroupingStructure(PictureBox picture, int valueGPR2a, int valueGPR2b, int valueGPR3, int valueGPR5)
+        {
+            Graphics g;
+            Pen pen = new Pen(Color.FromArgb(0, 0, 0), 5);
+            Pen penMax = new Pen(Color.Red, 5);
+            picture.Image = new Bitmap("C:/Users/sawada/Desktop/test.bmp");
+            picture.Size = new Size(picture.Image.Width, picture.Image.Height);
+            g = Graphics.FromImage(picture.Image);
+
+            for (int i = 0; i < groupingBoundary.Length; i++)
+            {
+                groupingBoundary[i] = gpr2a[i] * (double)(valueGPR2a / 10.0) + gpr2b[i] * (double)(valueGPR2b / 10.0) + gpr3[i] * (double)(valueGPR3 / 10.0);
+                groupingBoundary2[i] = groupingBoundary[i];
+            }
+
+            for (int i = 0; i < groupingBoundary.Length; i++)
+            {
+                groupingBoundary[i] = groupingBoundary[i] * gpr5[i] * (double)(valueGPR5 / 10.0) / groupingBoundary.Max();
+            }
+
+            for (int i = 0; i < groupingBoundary.Length; i++)
+            {
+                g.DrawLine(pen, xZero + beatInterval * i, yZero, xZero + beatInterval * i, yZero - (int)(groupingBoundary[i] * 500));
+            }
+
+
+            
+            maxIndex = System.Array.IndexOf(groupingBoundary, groupingBoundary.Max());
+            maxIndexArray[0] = maxIndex;
+
+            functionGPR5(maxIndex);
+
+            for (int i = 0; i < groupingBoundary.Length; i++)
+            {
+                groupingBoundary[i] = groupingBoundary[i] * gpr5[i] * (double)(valueGPR5 / 10.0) / groupingBoundary.Max();
+                groupingBoundary2[i] = groupingBoundary2[i] * gpr5Array[0][i] * (double)(valueGPR5 / 10.0) / groupingBoundary2.Max();
+            }
+
+
+            maxIndex = System.Array.IndexOf(groupingBoundary2, groupingBoundary2.Max());
+            maxIndexArray[1] = maxIndex;
+
+            Console.WriteLine("" + maxIndex);
+
+            //maxIndexArray[2] = System.Array.IndexOf(groupingArray3, groupingArray3.Max());
+
+            g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[0], yZero, xZero + beatInterval * maxIndexArray[0], yZero - 500);
+            g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[1], yZero, xZero + beatInterval * maxIndexArray[1], yZero - 500);
+            //g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[2], yZero, xZero + beatInterval * maxIndexArray[2], yZero - 500);
+            
+        }
+
+        public void functionGPR5(int max)
+        {
+            var tempGPR5 = new double[gpr5.Length];
+
+            for (int i = 0; i < gpr5.Length; i++)
+            {
+                if (i <= max / 2) tempGPR5[i] = (2.0 * i) / max;
+                else tempGPR5[i] = 2 - (2.0 * i) / max;
+            }
+            gpr5Array[0] = tempGPR5;
+
         }
 
         /**
