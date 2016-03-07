@@ -463,7 +463,7 @@ namespace SignalAnalyzer
             maxIndex = System.Array.IndexOf(groupingBoundary3, groupingBoundary3.Max());
             maxIndexArray[2] = maxIndex + maxIndexArray[0];
 
-            Console.WriteLine("" + maxIndexArray);
+            //Console.WriteLine("" + maxIndexArray);
 
             //maxIndexArray[2] = System.Array.IndexOf(groupingArray3, groupingArray3.Max());
 

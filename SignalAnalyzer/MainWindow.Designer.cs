@@ -70,6 +70,7 @@
             this.trackBarGPR3 = new System.Windows.Forms.TrackBar();
             this.trackBarGPR2b = new System.Windows.Forms.TrackBar();
             this.trackBarGPR2a = new System.Windows.Forms.TrackBar();
+            this.playButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -438,11 +439,22 @@
             this.trackBarGPR2a.Value = 5;
             this.trackBarGPR2a.Scroll += new System.EventHandler(this.trackBarGPR2a_Scroll);
             // 
+            // playButton
+            // 
+            this.playButton.Location = new System.Drawing.Point(13, 37);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(75, 23);
+            this.playButton.TabIndex = 12;
+            this.playButton.Text = "Play";
+            this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 720);
+            this.Controls.Add(this.playButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.allProgressBar);
             this.Controls.Add(this.progressBar);
@@ -515,6 +527,7 @@
         private System.Windows.Forms.Label labelGPR3Param;
         private System.Windows.Forms.Label labelGPR2bParam;
         private System.Windows.Forms.Label labelGPR2aParam;
+        private System.Windows.Forms.Button playButton;
     }
 }
 

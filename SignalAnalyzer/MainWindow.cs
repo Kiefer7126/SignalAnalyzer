@@ -18,6 +18,8 @@ namespace SignalAnalyzer
         MetricalStructure metricalStruct;
         Graph gprGraph;
 
+        private System.Media.SoundPlayer player = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -278,6 +280,8 @@ namespace SignalAnalyzer
             string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
             wavFile = importFile.ReadAudioWav(fileName);
 
+            PlaySound(fileName);
+
             var freqAnalyzer = new FrequencyAnalyzer();
             freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
@@ -447,6 +451,36 @@ namespace SignalAnalyzer
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void playButton_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        //WAVEファイルを再生する
+        private void PlaySound(string waveFile)
+        {
+            //再生されているときは止める
+            if (player != null)
+                StopSound();
+
+            //読み込む
+            player = new System.Media.SoundPlayer(waveFile);
+
+            player.PlayLooping();
+
+        }
+
+        //再生されている音を止める
+        private void StopSound()
+        {
+            if (player != null)
+            {
+                player.Stop();
+                player.Dispose();
+                player = null;
+            }
         }
     } 
 }
