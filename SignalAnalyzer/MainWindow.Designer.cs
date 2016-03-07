@@ -88,7 +88,7 @@
             this.analyzeMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1254, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(854, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -213,13 +213,13 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartcontrol.Series.Add(series1);
-            this.chartcontrol.Size = new System.Drawing.Size(1230, 128);
+            this.chartcontrol.Size = new System.Drawing.Size(802, 128);
             this.chartcontrol.TabIndex = 1;
             this.chartcontrol.Text = "chart1";
             // 
             // drawSpectrogramButton
             // 
-            this.drawSpectrogramButton.Location = new System.Drawing.Point(1106, 298);
+            this.drawSpectrogramButton.Location = new System.Drawing.Point(698, 307);
             this.drawSpectrogramButton.Name = "drawSpectrogramButton";
             this.drawSpectrogramButton.Size = new System.Drawing.Size(116, 23);
             this.drawSpectrogramButton.TabIndex = 2;
@@ -232,21 +232,22 @@
             this.pictureBox1.BackColor = System.Drawing.SystemColors.Window;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1063, 504);
+            this.pictureBox1.Size = new System.Drawing.Size(652, 504);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(12, 70);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1064, 504);
+            this.panel1.Size = new System.Drawing.Size(653, 504);
             this.panel1.TabIndex = 4;
             // 
             // generateAudioBeat
             // 
-            this.generateAudioBeat.Location = new System.Drawing.Point(1106, 327);
+            this.generateAudioBeat.Location = new System.Drawing.Point(698, 336);
             this.generateAudioBeat.Name = "generateAudioBeat";
             this.generateAudioBeat.Size = new System.Drawing.Size(116, 23);
             this.generateAudioBeat.TabIndex = 5;
@@ -256,7 +257,7 @@
             // 
             // beatDetectionButton
             // 
-            this.beatDetectionButton.Location = new System.Drawing.Point(1106, 356);
+            this.beatDetectionButton.Location = new System.Drawing.Point(698, 365);
             this.beatDetectionButton.Name = "beatDetectionButton";
             this.beatDetectionButton.Size = new System.Drawing.Size(116, 23);
             this.beatDetectionButton.TabIndex = 6;
@@ -266,7 +267,7 @@
             // 
             // generateBeatAllButton
             // 
-            this.generateBeatAllButton.Location = new System.Drawing.Point(1106, 522);
+            this.generateBeatAllButton.Location = new System.Drawing.Point(698, 520);
             this.generateBeatAllButton.Name = "generateBeatAllButton";
             this.generateBeatAllButton.Size = new System.Drawing.Size(117, 23);
             this.generateBeatAllButton.TabIndex = 7;
@@ -276,9 +277,9 @@
             // 
             // buttonGPR
             // 
-            this.buttonGPR.Location = new System.Drawing.Point(364, 41);
+            this.buttonGPR.Location = new System.Drawing.Point(698, 394);
             this.buttonGPR.Name = "buttonGPR";
-            this.buttonGPR.Size = new System.Drawing.Size(75, 23);
+            this.buttonGPR.Size = new System.Drawing.Size(116, 23);
             this.buttonGPR.TabIndex = 8;
             this.buttonGPR.Text = "GPR";
             this.buttonGPR.UseVisualStyleBackColor = true;
@@ -286,7 +287,7 @@
             // 
             // beatEvaluation
             // 
-            this.beatEvaluation.Location = new System.Drawing.Point(1106, 551);
+            this.beatEvaluation.Location = new System.Drawing.Point(698, 549);
             this.beatEvaluation.Name = "beatEvaluation";
             this.beatEvaluation.Size = new System.Drawing.Size(116, 23);
             this.beatEvaluation.TabIndex = 9;
@@ -296,14 +297,14 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(527, 51);
+            this.progressBar.Location = new System.Drawing.Point(258, 49);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(245, 12);
             this.progressBar.TabIndex = 10;
             // 
             // allProgressBar
             // 
-            this.allProgressBar.Location = new System.Drawing.Point(527, 29);
+            this.allProgressBar.Location = new System.Drawing.Point(258, 27);
             this.allProgressBar.Name = "allProgressBar";
             this.allProgressBar.Size = new System.Drawing.Size(245, 19);
             this.allProgressBar.TabIndex = 11;
@@ -322,7 +323,7 @@
             this.groupBox1.Controls.Add(this.trackBarGPR3);
             this.groupBox1.Controls.Add(this.trackBarGPR2b);
             this.groupBox1.Controls.Add(this.trackBarGPR2a);
-            this.groupBox1.Location = new System.Drawing.Point(1082, 63);
+            this.groupBox1.Location = new System.Drawing.Point(674, 72);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(161, 229);
             this.groupBox1.TabIndex = 4;
@@ -441,7 +442,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1254, 720);
+            this.ClientSize = new System.Drawing.Size(854, 720);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.allProgressBar);
             this.Controls.Add(this.progressBar);

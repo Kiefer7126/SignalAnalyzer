@@ -23,7 +23,7 @@ namespace SignalAnalyzer
         private float xStep, yStep, dataMax, dataMin;
         private String xLabel, yLabel;
 
-        private double[] groupingBoundary, groupingBoundary2, gpr2a, gpr2b, gpr3, gpr5;
+        private double[] groupingBoundary, groupingBoundary2,groupingBoundary3, gpr2a, gpr2b, gpr3, gpr5;
         private int beatInterval;
         private int maxIndex;
 
@@ -385,7 +385,7 @@ namespace SignalAnalyzer
             double s3 = 0.2;
 
             groupingBoundary = new double[sumPower.Length];
-            groupingBoundary2 = new double[sumPower.Length];
+
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
                 groupingBoundary[i] = gpr2a[i] * s2a + gpr2b[i] * s2b + gpr3[i] * s3;
@@ -409,6 +409,9 @@ namespace SignalAnalyzer
         double[] groupingArray3;
         public void drawGroupingStructure(PictureBox picture, int valueGPR2a, int valueGPR2b, int valueGPR3, int valueGPR5)
         {
+            groupingBoundary2 = new double[groupingBoundary.Length];
+            groupingBoundary3 = new double[groupingBoundary.Length];
+
             Graphics g;
             Pen pen = new Pen(Color.FromArgb(0, 0, 0), 5);
             Pen penMax = new Pen(Color.Red, 5);
@@ -416,10 +419,12 @@ namespace SignalAnalyzer
             picture.Size = new Size(picture.Image.Width, picture.Image.Height);
             g = Graphics.FromImage(picture.Image);
 
+
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
                 groupingBoundary[i] = gpr2a[i] * (double)(valueGPR2a / 10.0) + gpr2b[i] * (double)(valueGPR2b / 10.0) + gpr3[i] * (double)(valueGPR3 / 10.0);
-                groupingBoundary2[i] = groupingBoundary[i];
+               // groupingBoundary2[i] = groupingBoundary[i];
+               // groupingBoundary3[i] = groupingBoundary[i];
             }
 
             for (int i = 0; i < groupingBoundary.Length; i++)
@@ -437,38 +442,48 @@ namespace SignalAnalyzer
             maxIndex = System.Array.IndexOf(groupingBoundary, groupingBoundary.Max());
             maxIndexArray[0] = maxIndex;
 
-            functionGPR5(maxIndex);
+
+            Array.Copy(groupingBoundary, 0, groupingBoundary2, 0, maxIndex-1);
+            Array.Copy(groupingBoundary, maxIndex, groupingBoundary3, 0, groupingBoundary.Length-maxIndex);
+            
+            functionGPR5(0, maxIndex,0);
+            functionGPR5(maxIndex, groupingBoundary.Length, 1);
 
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
-                groupingBoundary[i] = groupingBoundary[i] * gpr5[i] * (double)(valueGPR5 / 10.0) / groupingBoundary.Max();
+                //groupingBoundary[i] = groupingBoundary[i] * gpr5[i] * (double)(valueGPR5 / 10.0) / groupingBoundary.Max();
                 groupingBoundary2[i] = groupingBoundary2[i] * gpr5Array[0][i] * (double)(valueGPR5 / 10.0) / groupingBoundary2.Max();
+                groupingBoundary3[i] = groupingBoundary3[i] * gpr5Array[1][i] * (double)(valueGPR5 / 10.0) / groupingBoundary3.Max();
             }
 
 
             maxIndex = System.Array.IndexOf(groupingBoundary2, groupingBoundary2.Max());
             maxIndexArray[1] = maxIndex;
 
-            Console.WriteLine("" + maxIndex);
+            maxIndex = System.Array.IndexOf(groupingBoundary3, groupingBoundary3.Max());
+            maxIndexArray[2] = maxIndex + maxIndexArray[0];
+
+            Console.WriteLine("" + maxIndexArray);
 
             //maxIndexArray[2] = System.Array.IndexOf(groupingArray3, groupingArray3.Max());
 
             g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[0], yZero, xZero + beatInterval * maxIndexArray[0], yZero - 500);
             g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[1], yZero, xZero + beatInterval * maxIndexArray[1], yZero - 500);
+            g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[2], yZero, xZero + beatInterval * maxIndexArray[2], yZero - 500);
             //g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[2], yZero, xZero + beatInterval * maxIndexArray[2], yZero - 500);
             
         }
 
-        public void functionGPR5(int max)
+        public void functionGPR5(int begin, int max, int h)
         {
             var tempGPR5 = new double[gpr5.Length];
 
             for (int i = 0; i < gpr5.Length; i++)
             {
-                if (i <= max / 2) tempGPR5[i] = (2.0 * i) / max;
+                if (i <= begin + (max / 2) ) tempGPR5[i] = (2.0 * i) / max;
                 else tempGPR5[i] = 2 - (2.0 * i) / max;
             }
-            gpr5Array[0] = tempGPR5;
+            gpr5Array[h] = tempGPR5;
 
         }
 

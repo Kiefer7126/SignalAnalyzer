@@ -440,7 +440,12 @@ namespace SignalAnalyzer
         private void hierarchalButton_Click(object sender, EventArgs e)
         {
             int maxIndex = gprGraph.getMaxIndex();
-            gprGraph.functionGPR5(maxIndex);
+            //gprGraph.functionGPR5(maxIndex);
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
 
         }
     } 
