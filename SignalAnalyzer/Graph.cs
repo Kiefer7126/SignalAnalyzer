@@ -23,7 +23,7 @@ namespace SignalAnalyzer
         private float xStep, yStep, dataMax, dataMin;
         private String xLabel, yLabel;
 
-        private double[] groupingBoundary, groupingBoundary2,groupingBoundary3, gpr2a, gpr2b, gpr3, gpr5;
+        private double[] groupingBoundary, groupingBoundary2, groupingBoundary3, gpr2a, gpr2b, gpr3, gpr5;
         private int beatInterval;
         private int maxIndex;
 
@@ -38,7 +38,7 @@ namespace SignalAnalyzer
         {
             return maxIndex;
         }
-            
+
         public void draw(Chart chartcontrol, int[] data)
         {
             //軸ラベルの設定
@@ -203,11 +203,12 @@ namespace SignalAnalyzer
 
                     for (int i = 0; i < freq.stftData[0].Length / 4; i++)
                     {
-                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 5 * dataIntervalNomalization);
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 10 * dataIntervalNomalization);
                         ToHsv(plotData);
 
                         /* color */
                         spectrogramPen.Color = Color.FromArgb(red, green, blue);
+
 
                         /* monochrome */
                         //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
@@ -249,7 +250,7 @@ namespace SignalAnalyzer
 
             for (int i = 0; i < metric.Length; i++)
             {
-                g.DrawLine(Pens.Blue, (xZero + i), yZero, (xZero + i), yZero - metric[i] );
+                g.DrawLine(Pens.Blue, (xZero + i), yZero, (xZero + i), yZero - metric[i]);
             }
 
             var positiveStftData = new double[divStftData.Length][];
@@ -301,8 +302,8 @@ namespace SignalAnalyzer
                 changeRatio = (int)(changeRatioData[i] / 300);
 
                 //if (changeRatio > 210) g.DrawLine(boundaryPen, xZero + (beatInterval * (i) + 10), yZero, xZero + (beatInterval * (i) + 10), yMax); //グルーピング協会
- //               g.DrawLine(metricPen, xZero + (beatInterval) * (i) + 10, yMax, xZero + (beatInterval) * (i) + 10, yMax + changeRatio);
- //               g.DrawLine(metricPen, xZero + (beatInterval * (i) + 10), yMax + 100, xZero + (beatInterval * (i) + 10), yMax + 100 + (int)(sumPower[i] / 500));
+                //               g.DrawLine(metricPen, xZero + (beatInterval) * (i) + 10, yMax, xZero + (beatInterval) * (i) + 10, yMax + changeRatio);
+                //               g.DrawLine(metricPen, xZero + (beatInterval * (i) + 10), yMax + 100, xZero + (beatInterval * (i) + 10), yMax + 100 + (int)(sumPower[i] / 500));
             }
 
 
@@ -423,8 +424,8 @@ namespace SignalAnalyzer
             for (int i = 0; i < groupingBoundary.Length; i++)
             {
                 groupingBoundary[i] = gpr2a[i] * (double)(valueGPR2a / 10.0) + gpr2b[i] * (double)(valueGPR2b / 10.0) + gpr3[i] * (double)(valueGPR3 / 10.0);
-               // groupingBoundary2[i] = groupingBoundary[i];
-               // groupingBoundary3[i] = groupingBoundary[i];
+                // groupingBoundary2[i] = groupingBoundary[i];
+                // groupingBoundary3[i] = groupingBoundary[i];
             }
 
             for (int i = 0; i < groupingBoundary.Length; i++)
@@ -438,15 +439,15 @@ namespace SignalAnalyzer
             }
 
 
-            
+
             maxIndex = System.Array.IndexOf(groupingBoundary, groupingBoundary.Max());
             maxIndexArray[0] = maxIndex;
 
 
-            Array.Copy(groupingBoundary, 0, groupingBoundary2, 0, maxIndex-1);
-            Array.Copy(groupingBoundary, maxIndex, groupingBoundary3, 0, groupingBoundary.Length-maxIndex);
-            
-            functionGPR5(0, maxIndex,0);
+            Array.Copy(groupingBoundary, 0, groupingBoundary2, 0, maxIndex - 1);
+            Array.Copy(groupingBoundary, maxIndex, groupingBoundary3, 0, groupingBoundary.Length - maxIndex);
+
+            functionGPR5(0, maxIndex, 0);
             functionGPR5(maxIndex, groupingBoundary.Length, 1);
 
             for (int i = 0; i < groupingBoundary.Length; i++)
@@ -471,7 +472,7 @@ namespace SignalAnalyzer
             g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[1], yZero, xZero + beatInterval * maxIndexArray[1], yZero - 500);
             g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[2], yZero, xZero + beatInterval * maxIndexArray[2], yZero - 500);
             //g.DrawLine(penMax, xZero + beatInterval * maxIndexArray[2], yZero, xZero + beatInterval * maxIndexArray[2], yZero - 500);
-            
+
         }
 
         public void functionGPR5(int begin, int max, int h)
@@ -480,7 +481,7 @@ namespace SignalAnalyzer
 
             for (int i = 0; i < gpr5.Length; i++)
             {
-                if (i <= begin + (max / 2) ) tempGPR5[i] = (2.0 * i) / max;
+                if (i <= begin + (max / 2)) tempGPR5[i] = (2.0 * i) / max;
                 else tempGPR5[i] = 2 - (2.0 * i) / max;
             }
             gpr5Array[h] = tempGPR5;
@@ -500,35 +501,82 @@ namespace SignalAnalyzer
         {
             switch (plotHsvData / 255)
             {
+
+
                 case 0:
                     red = 0;
                     green = 0;
-                    blue = 0 + (plotHsvData % 255);
+                    blue = 0 + (plotHsvData % 255) / 10;
                     break;
 
                 case 1:
                     red = 0;
-                    green = 0 + (plotHsvData % 255);
-                    blue = 255;
+                    green = 0;
+                    blue = 255 / 10 + (plotHsvData % 255) / 10;
                     break;
 
                 case 2:
                     red = 0;
-                    green = 255;
-                    blue = 255 - (plotHsvData % 255);
+                    green = 0;
+                    blue = 255*2 / 10 + (plotHsvData % 255) / 10;
                     break;
 
                 case 3:
-                    red = 0 + (plotHsvData % 255);
-                    green = 255;
-                    blue = 0;
+                    red = 0;
+                    green = 0;
+                    blue = 255*3 / 10 + (plotHsvData % 255) / 10;
                     break;
 
                 case 4:
-                    red = 255;
-                    green = 255 - (plotHsvData % 255);
+                    red = 0;
+                    green = 0;
+                    blue = 255 * 4 / 10 + (plotHsvData % 255) / 10;
+                    break;
+
+                case 5:
+                    red = 0;
+                    green = 0;
+                    blue = 255/2 + (plotHsvData % 255) / 2;
+                    break;
+
+                case 6:
+                    red = 0;
+                    green = 0 + (plotHsvData % 255)/2;
+                    blue = 255 - (plotHsvData % 255);
+                    break;
+
+                /*
+            case 4:
+                red = 0+ (plotHsvData % 255);
+                green = 255 / 2 + (plotHsvData % 255) / 2;
+                blue = 255;
+                break;
+                */
+/*
+                case 7:
+                    red = 0;
+                    green = 255;
+                    blue = 255 - (plotHsvData % 255);
+                    break;
+                    */
+                case 7:
+                    red = 0 + (plotHsvData % 255);
+                    green = 255 / 2 + (plotHsvData % 255)/2;
                     blue = 0;
                     break;
+
+                case 8:
+                    red = 255;
+                    green = 255 - (plotHsvData % 255)/2;
+                    blue = 0;
+                    break;
+
+                case 9:
+                    red = 255;
+                    green = 255/2 - (plotHsvData % 255)/2;
+                    blue = 0;
+                    break;
+
             }
         }
 
