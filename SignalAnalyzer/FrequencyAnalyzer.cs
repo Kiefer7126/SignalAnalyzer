@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SignalAnalyzer
 {
@@ -16,10 +17,15 @@ namespace SignalAnalyzer
         public double[][] stftData;
         public static double[] twiddleFactor;
         public int focusFreqLength = 50;
-        public void STFT(int[] data)
+
+        public void STFT(int[] data, ProgressBar progressBar)
         {
             stftData = new double[data.Length / shiftLength][];
             var splitData = new int[data.Length/shiftLength][];
+
+            progressBar.Minimum = 0;
+            progressBar.Maximum = stftData.Length;
+            progressBar.Value = 0;
 
             Console.WriteLine("Split Data...");
             for (int i = 0; i < splitData.Length; i++) splitData[i] = SplitWindowLength(data,i);
@@ -35,7 +41,7 @@ namespace SignalAnalyzer
             for (int i = 0; i < stftData.Length; i++)
             {
                 stftData[i] = FFT(gaussianData[i]);
-                if(i%100 == 0) Console.Write(string.Format("{0, 3:d0}% \r", 100 * i / stftData.Length));
+                progressBar.Value = i;
             }
             Console.WriteLine("Done FFT!");
         }

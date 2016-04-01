@@ -132,6 +132,8 @@ namespace SignalAnalyzer
             string loadFileName = fileName;
             WavFile wavFile = new WavFile();
 
+
+
             if (loadFileName == "" || loadFileName == null) return null;
             else
             {
@@ -165,15 +167,15 @@ namespace SignalAnalyzer
                                 }
                             }
                             wavFile.fmtID = System.Text.Encoding.ASCII.GetBytes("fmt ");
-                            
-                            wavFile.fmtSize = br.ReadUInt32(); 
+
+                            wavFile.fmtSize = br.ReadUInt32();
                             wavFile.format = br.ReadUInt16();
                             wavFile.channels = br.ReadUInt16();
                             wavFile.samplingRate = br.ReadUInt32();
                             wavFile.bytePerSec = br.ReadUInt32();
                             wavFile.blockSize = br.ReadUInt16();
                             wavFile.bitPerSampling = br.ReadUInt16();
-                            
+
                             //拡張部分
                             //if(wavFile.fmtSize > 16) for(int i = 0; i < (wavFile.fmtSize - 16)/2; i++) br.ReadUInt16();
 
@@ -199,7 +201,7 @@ namespace SignalAnalyzer
                             //wavFile.dataID = br.ReadBytes(4);
                             wavFile.dataSize = br.ReadUInt32();
 
-                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize / 8; //4分の1サイズ
+                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize; //4分の1サイズ
 
                             int[] rightDataArray = new int[dataArrayLength];
                             int[] leftDataArray = new int[dataArrayLength];
@@ -237,5 +239,6 @@ namespace SignalAnalyzer
             }
             return wavFile;
         }
+
     }
 }

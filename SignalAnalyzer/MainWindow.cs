@@ -16,12 +16,21 @@ namespace SignalAnalyzer
     {
         WavFile wavFile;
         MetricalStructure metricalStruct;
+        Graph gprGraph;
+
+        private System.Media.SoundPlayer player = null;
 
         public MainWindow()
         {
             InitializeComponent();
             wavFile = new WavFile();
             metricalStruct = new MetricalStructure();
+
+            allProgressBar.Minimum = 0;
+            allProgressBar.Maximum = 3; //処理の数
+            allProgressBar.Value = 0;
+
+            gprGraph = new Graph();
         }
 
         /**
@@ -94,7 +103,7 @@ namespace SignalAnalyzer
         private void analyzeSTFTMenu_Click(object sender, EventArgs e)
         {
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
             //スクロールバーが表示されるようにする
             this.panel1.AutoScroll = true;
@@ -103,7 +112,7 @@ namespace SignalAnalyzer
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
             var graph = new Graph();
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0, this.progressBar);
         }
 
         /**
@@ -115,14 +124,17 @@ namespace SignalAnalyzer
 
         private void testButton_Click(object sender, EventArgs e)
         {
+            
             var importFile = new ImportFile();
             string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
             wavFile = importFile.ReadAudioWav(fileName);
             var graph = new Graph();
             graph.draw(this.chartcontrol, wavFile.RightData);
+            allProgressBar.Value = 1;
 
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
+            allProgressBar.Value = 2;
 
             //スクロールバーが表示されるようにする
             this.panel1.AutoScroll = true;
@@ -130,7 +142,9 @@ namespace SignalAnalyzer
             //PictureBoxの大きさが変更させるようにする
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0);
+            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0, this.progressBar);
+            allProgressBar.Value = 3;
+
         }
 
         /**
@@ -194,7 +208,7 @@ namespace SignalAnalyzer
             wavFile = importFile.ReadAudioWav(fileName);
 
             var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
             var beatDetection = new BeatDetection();
             var beat = new double[freqAnalyzer.stftData.Length];
@@ -230,7 +244,7 @@ namespace SignalAnalyzer
             {
                 wavFile = importFile.ReadAudioWav(fileName);
 
-                freqAnalyzer.STFT(wavFile.RightData);
+                freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
 
                 var beat = new double[freqAnalyzer.stftData.Length];
                 beat = beatDetection.main(freqAnalyzer);
@@ -263,12 +277,28 @@ namespace SignalAnalyzer
             var importFile = new ImportFile();
             //ファイルを選ぶときに使用
 
-
-            string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
-            metricalStruct = importFile.ReadMetric(beatFileName);
-
             string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
             wavFile = importFile.ReadAudioWav(fileName);
+
+            PlaySound(fileName);
+
+            var freqAnalyzer = new FrequencyAnalyzer();
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
+
+            var beatDetection = new BeatDetection();
+            var beat = new double[freqAnalyzer.stftData.Length];
+            beat = beatDetection.main(freqAnalyzer);
+
+            var exportFile = new ExportFile();
+            string exportFileName = exportFile.SaveFileDialog(ExportFile.Formats.Text);
+            exportFile.WriteMetricalText(beat, exportFileName);
+
+            metricalStruct = importFile.ReadMetric(exportFileName);
+
+            /*
+            string beatFileName = importFile.OpenFileDialog(ImportFile.Formats.Text);
+            metricalStruct = importFile.ReadMetric(beatFileName);
+             */
 
             /*
             metricalStruct = importFile.ReadMetric("C:/Users/sawada/Desktop/AIST.RWC-MDB-P-2001.BEAT/RM-P001.BEAT.txt");
@@ -283,10 +313,6 @@ namespace SignalAnalyzer
          wavFile = importFile.ReadAudioWav("C:/Users/sawada/Desktop/02 Symphony no. 40 in G minor, K. 550. 1st mvmt-01.wav");
         */
 
-            var freqAnalyzer = new FrequencyAnalyzer();
-            freqAnalyzer.STFT(wavFile.RightData);
-
-
             //スクロールバーが表示されるようにする
             this.panel1.AutoScroll = true;
 
@@ -294,9 +320,8 @@ namespace SignalAnalyzer
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
             //スペクトログラムの描画
-            var graph = new Graph();
-
-            graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval);
+            
+            gprGraph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval, this.progressBar);
         }
 
         /**
@@ -382,5 +407,80 @@ namespace SignalAnalyzer
                 }
             }
          }
+
+        private void changeGPRValiable()
+        {
+            //スクロールバーが表示されるようにする
+            this.panel1.AutoScroll = true;
+
+            gprGraph.drawGroupingStructure(this.pictureBox1, trackBarGPR2a.Value, trackBarGPR2b.Value, trackBarGPR3.Value, trackBarGPR5.Value);
+        }
+
+        private void trackBarGPR2a_Scroll(object sender, EventArgs e)
+        {
+            changeGPRValiable();
+            labelGPR2aParam.Text = "" + trackBarGPR2a.Value/10.0;
+
+        }
+
+        private void trackBarGPR2b_Scroll(object sender, EventArgs e)
+        {
+            changeGPRValiable();
+            labelGPR2bParam.Text = "" + trackBarGPR2b.Value / 10.0;
+        }
+
+        private void trackBarGPR3_Scroll(object sender, EventArgs e)
+        {
+            changeGPRValiable();
+            labelGPR3Param.Text = "" + trackBarGPR3.Value / 10.0;
+        }
+
+        private void trackBarGPR5_Scroll(object sender, EventArgs e)
+        {
+            changeGPRValiable();
+            labelGPR5Param.Text = "" + trackBarGPR5.Value / 10.0;
+        }
+
+        private void hierarchalButton_Click(object sender, EventArgs e)
+        {
+            int maxIndex = gprGraph.getMaxIndex();
+            //gprGraph.functionGPR5(maxIndex);
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void playButton_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        //WAVEファイルを再生する
+        private void PlaySound(string waveFile)
+        {
+            //再生されているときは止める
+            if (player != null)
+                StopSound();
+
+            //読み込む
+            player = new System.Media.SoundPlayer(waveFile);
+
+            player.PlayLooping();
+
+        }
+
+        //再生されている音を止める
+        private void StopSound()
+        {
+            if (player != null)
+            {
+                player.Stop();
+                player.Dispose();
+                player = null;
+            }
+        }
     } 
 }

@@ -47,18 +47,39 @@
             this.analyzeMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.analyzeSTFTMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.chartcontrol = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.testButton = new System.Windows.Forms.Button();
+            this.drawSpectrogramButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.beat = new System.Windows.Forms.Button();
+            this.generateAudioBeat = new System.Windows.Forms.Button();
             this.beatDetectionButton = new System.Windows.Forms.Button();
-            this.experimentsButton = new System.Windows.Forms.Button();
+            this.generateBeatAllButton = new System.Windows.Forms.Button();
             this.buttonGPR = new System.Windows.Forms.Button();
-            this.beatEval = new System.Windows.Forms.Button();
+            this.beatEvaluation = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.allProgressBar = new System.Windows.Forms.ProgressBar();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.labelGPR5Param = new System.Windows.Forms.Label();
+            this.labelGPR3Param = new System.Windows.Forms.Label();
+            this.labelGPR2bParam = new System.Windows.Forms.Label();
+            this.labelGPR2aParam = new System.Windows.Forms.Label();
+            this.labelGPR5 = new System.Windows.Forms.Label();
+            this.labelGPR3 = new System.Windows.Forms.Label();
+            this.labelGPR2b = new System.Windows.Forms.Label();
+            this.labelGPR2a = new System.Windows.Forms.Label();
+            this.trackBarGPR5 = new System.Windows.Forms.TrackBar();
+            this.trackBarGPR3 = new System.Windows.Forms.TrackBar();
+            this.trackBarGPR2b = new System.Windows.Forms.TrackBar();
+            this.trackBarGPR2a = new System.Windows.Forms.TrackBar();
+            this.playButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR2b)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR2a)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -68,7 +89,7 @@
             this.analyzeMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1254, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(854, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -193,99 +214,257 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartcontrol.Series.Add(series1);
-            this.chartcontrol.Size = new System.Drawing.Size(1230, 128);
+            this.chartcontrol.Size = new System.Drawing.Size(802, 128);
             this.chartcontrol.TabIndex = 1;
             this.chartcontrol.Text = "chart1";
             // 
-            // testButton
+            // drawSpectrogramButton
             // 
-            this.testButton.Location = new System.Drawing.Point(24, 41);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(75, 23);
-            this.testButton.TabIndex = 2;
-            this.testButton.Text = "test";
-            this.testButton.UseVisualStyleBackColor = true;
-            this.testButton.Click += new System.EventHandler(this.testButton_Click);
+            this.drawSpectrogramButton.Location = new System.Drawing.Point(698, 307);
+            this.drawSpectrogramButton.Name = "drawSpectrogramButton";
+            this.drawSpectrogramButton.Size = new System.Drawing.Size(116, 23);
+            this.drawSpectrogramButton.TabIndex = 2;
+            this.drawSpectrogramButton.Text = "DrawSpectrogram";
+            this.drawSpectrogramButton.UseVisualStyleBackColor = true;
+            this.drawSpectrogramButton.Click += new System.EventHandler(this.testButton_Click);
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.Window;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1230, 504);
+            this.pictureBox1.Size = new System.Drawing.Size(652, 504);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(12, 70);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1230, 504);
+            this.panel1.Size = new System.Drawing.Size(653, 504);
             this.panel1.TabIndex = 4;
             // 
-            // beat
+            // generateAudioBeat
             // 
-            this.beat.Location = new System.Drawing.Point(106, 41);
-            this.beat.Name = "beat";
-            this.beat.Size = new System.Drawing.Size(75, 23);
-            this.beat.TabIndex = 5;
-            this.beat.Text = "Metrical";
-            this.beat.UseVisualStyleBackColor = true;
-            this.beat.Click += new System.EventHandler(this.beat_Click);
+            this.generateAudioBeat.Location = new System.Drawing.Point(698, 336);
+            this.generateAudioBeat.Name = "generateAudioBeat";
+            this.generateAudioBeat.Size = new System.Drawing.Size(116, 23);
+            this.generateAudioBeat.TabIndex = 5;
+            this.generateAudioBeat.Text = "GenerateAudioBeat";
+            this.generateAudioBeat.UseVisualStyleBackColor = true;
+            this.generateAudioBeat.Click += new System.EventHandler(this.beat_Click);
             // 
             // beatDetectionButton
             // 
-            this.beatDetectionButton.Location = new System.Drawing.Point(188, 41);
+            this.beatDetectionButton.Location = new System.Drawing.Point(698, 365);
             this.beatDetectionButton.Name = "beatDetectionButton";
-            this.beatDetectionButton.Size = new System.Drawing.Size(75, 23);
+            this.beatDetectionButton.Size = new System.Drawing.Size(116, 23);
             this.beatDetectionButton.TabIndex = 6;
-            this.beatDetectionButton.Text = "Beat";
+            this.beatDetectionButton.Text = "BeatDetection";
             this.beatDetectionButton.UseVisualStyleBackColor = true;
             this.beatDetectionButton.Click += new System.EventHandler(this.beatDetectionButton_Click);
             // 
-            // experimentsButton
+            // generateBeatAllButton
             // 
-            this.experimentsButton.Location = new System.Drawing.Point(270, 41);
-            this.experimentsButton.Name = "experimentsButton";
-            this.experimentsButton.Size = new System.Drawing.Size(75, 23);
-            this.experimentsButton.TabIndex = 7;
-            this.experimentsButton.Text = "experiments";
-            this.experimentsButton.UseVisualStyleBackColor = true;
-            this.experimentsButton.Click += new System.EventHandler(this.experimentsButton_Click);
+            this.generateBeatAllButton.Location = new System.Drawing.Point(698, 520);
+            this.generateBeatAllButton.Name = "generateBeatAllButton";
+            this.generateBeatAllButton.Size = new System.Drawing.Size(117, 23);
+            this.generateBeatAllButton.TabIndex = 7;
+            this.generateBeatAllButton.Text = "GenerateBeatAll";
+            this.generateBeatAllButton.UseVisualStyleBackColor = true;
+            this.generateBeatAllButton.Click += new System.EventHandler(this.experimentsButton_Click);
             // 
             // buttonGPR
             // 
-            this.buttonGPR.Location = new System.Drawing.Point(351, 41);
+            this.buttonGPR.Location = new System.Drawing.Point(698, 394);
             this.buttonGPR.Name = "buttonGPR";
-            this.buttonGPR.Size = new System.Drawing.Size(75, 23);
+            this.buttonGPR.Size = new System.Drawing.Size(116, 23);
             this.buttonGPR.TabIndex = 8;
             this.buttonGPR.Text = "GPR";
             this.buttonGPR.UseVisualStyleBackColor = true;
             this.buttonGPR.Click += new System.EventHandler(this.buttonGPR_Click);
             // 
-            // beatEval
+            // beatEvaluation
             // 
-            this.beatEval.Location = new System.Drawing.Point(433, 41);
-            this.beatEval.Name = "beatEval";
-            this.beatEval.Size = new System.Drawing.Size(75, 23);
-            this.beatEval.TabIndex = 9;
-            this.beatEval.Text = "beatEval";
-            this.beatEval.UseVisualStyleBackColor = true;
-            this.beatEval.Click += new System.EventHandler(this.beatEval_Click);
+            this.beatEvaluation.Location = new System.Drawing.Point(698, 549);
+            this.beatEvaluation.Name = "beatEvaluation";
+            this.beatEvaluation.Size = new System.Drawing.Size(116, 23);
+            this.beatEvaluation.TabIndex = 9;
+            this.beatEvaluation.Text = "BeatEvaluation";
+            this.beatEvaluation.UseVisualStyleBackColor = true;
+            this.beatEvaluation.Click += new System.EventHandler(this.beatEval_Click);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(258, 49);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(245, 12);
+            this.progressBar.TabIndex = 10;
+            // 
+            // allProgressBar
+            // 
+            this.allProgressBar.Location = new System.Drawing.Point(258, 27);
+            this.allProgressBar.Name = "allProgressBar";
+            this.allProgressBar.Size = new System.Drawing.Size(245, 19);
+            this.allProgressBar.TabIndex = 11;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.labelGPR5Param);
+            this.groupBox1.Controls.Add(this.labelGPR3Param);
+            this.groupBox1.Controls.Add(this.labelGPR2bParam);
+            this.groupBox1.Controls.Add(this.labelGPR2aParam);
+            this.groupBox1.Controls.Add(this.labelGPR5);
+            this.groupBox1.Controls.Add(this.labelGPR3);
+            this.groupBox1.Controls.Add(this.labelGPR2b);
+            this.groupBox1.Controls.Add(this.labelGPR2a);
+            this.groupBox1.Controls.Add(this.trackBarGPR5);
+            this.groupBox1.Controls.Add(this.trackBarGPR3);
+            this.groupBox1.Controls.Add(this.trackBarGPR2b);
+            this.groupBox1.Controls.Add(this.trackBarGPR2a);
+            this.groupBox1.Location = new System.Drawing.Point(674, 72);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(161, 229);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "GPR Parameter";
+            // 
+            // labelGPR5Param
+            // 
+            this.labelGPR5Param.AutoSize = true;
+            this.labelGPR5Param.Location = new System.Drawing.Point(72, 161);
+            this.labelGPR5Param.Name = "labelGPR5Param";
+            this.labelGPR5Param.Size = new System.Drawing.Size(19, 12);
+            this.labelGPR5Param.TabIndex = 19;
+            this.labelGPR5Param.Text = "0.5";
+            // 
+            // labelGPR3Param
+            // 
+            this.labelGPR3Param.AutoSize = true;
+            this.labelGPR3Param.Location = new System.Drawing.Point(72, 116);
+            this.labelGPR3Param.Name = "labelGPR3Param";
+            this.labelGPR3Param.Size = new System.Drawing.Size(19, 12);
+            this.labelGPR3Param.TabIndex = 18;
+            this.labelGPR3Param.Text = "0.5";
+            // 
+            // labelGPR2bParam
+            // 
+            this.labelGPR2bParam.AutoSize = true;
+            this.labelGPR2bParam.Location = new System.Drawing.Point(72, 67);
+            this.labelGPR2bParam.Name = "labelGPR2bParam";
+            this.labelGPR2bParam.Size = new System.Drawing.Size(19, 12);
+            this.labelGPR2bParam.TabIndex = 17;
+            this.labelGPR2bParam.Text = "0.5";
+            // 
+            // labelGPR2aParam
+            // 
+            this.labelGPR2aParam.AutoSize = true;
+            this.labelGPR2aParam.Location = new System.Drawing.Point(72, 19);
+            this.labelGPR2aParam.Name = "labelGPR2aParam";
+            this.labelGPR2aParam.Size = new System.Drawing.Size(19, 12);
+            this.labelGPR2aParam.TabIndex = 16;
+            this.labelGPR2aParam.Text = "0.5";
+            // 
+            // labelGPR5
+            // 
+            this.labelGPR5.AutoSize = true;
+            this.labelGPR5.Location = new System.Drawing.Point(6, 161);
+            this.labelGPR5.Name = "labelGPR5";
+            this.labelGPR5.Size = new System.Drawing.Size(34, 12);
+            this.labelGPR5.TabIndex = 15;
+            this.labelGPR5.Text = "GPR5";
+            // 
+            // labelGPR3
+            // 
+            this.labelGPR3.AutoSize = true;
+            this.labelGPR3.Location = new System.Drawing.Point(6, 116);
+            this.labelGPR3.Name = "labelGPR3";
+            this.labelGPR3.Size = new System.Drawing.Size(34, 12);
+            this.labelGPR3.TabIndex = 14;
+            this.labelGPR3.Text = "GPR3";
+            // 
+            // labelGPR2b
+            // 
+            this.labelGPR2b.AutoSize = true;
+            this.labelGPR2b.Location = new System.Drawing.Point(6, 67);
+            this.labelGPR2b.Name = "labelGPR2b";
+            this.labelGPR2b.Size = new System.Drawing.Size(40, 12);
+            this.labelGPR2b.TabIndex = 13;
+            this.labelGPR2b.Text = "GPR2b";
+            // 
+            // labelGPR2a
+            // 
+            this.labelGPR2a.AutoSize = true;
+            this.labelGPR2a.Location = new System.Drawing.Point(6, 19);
+            this.labelGPR2a.Name = "labelGPR2a";
+            this.labelGPR2a.Size = new System.Drawing.Size(40, 12);
+            this.labelGPR2a.TabIndex = 12;
+            this.labelGPR2a.Text = "GPR2a";
+            // 
+            // trackBarGPR5
+            // 
+            this.trackBarGPR5.Location = new System.Drawing.Point(7, 176);
+            this.trackBarGPR5.Name = "trackBarGPR5";
+            this.trackBarGPR5.Size = new System.Drawing.Size(148, 45);
+            this.trackBarGPR5.TabIndex = 3;
+            this.trackBarGPR5.Value = 5;
+            this.trackBarGPR5.Scroll += new System.EventHandler(this.trackBarGPR5_Scroll);
+            // 
+            // trackBarGPR3
+            // 
+            this.trackBarGPR3.Location = new System.Drawing.Point(7, 128);
+            this.trackBarGPR3.Name = "trackBarGPR3";
+            this.trackBarGPR3.Size = new System.Drawing.Size(148, 45);
+            this.trackBarGPR3.TabIndex = 2;
+            this.trackBarGPR3.Value = 5;
+            this.trackBarGPR3.Scroll += new System.EventHandler(this.trackBarGPR3_Scroll);
+            // 
+            // trackBarGPR2b
+            // 
+            this.trackBarGPR2b.Location = new System.Drawing.Point(7, 82);
+            this.trackBarGPR2b.Name = "trackBarGPR2b";
+            this.trackBarGPR2b.Size = new System.Drawing.Size(148, 45);
+            this.trackBarGPR2b.TabIndex = 1;
+            this.trackBarGPR2b.Value = 5;
+            this.trackBarGPR2b.Scroll += new System.EventHandler(this.trackBarGPR2b_Scroll);
+            // 
+            // trackBarGPR2a
+            // 
+            this.trackBarGPR2a.Location = new System.Drawing.Point(8, 34);
+            this.trackBarGPR2a.Name = "trackBarGPR2a";
+            this.trackBarGPR2a.Size = new System.Drawing.Size(146, 45);
+            this.trackBarGPR2a.TabIndex = 0;
+            this.trackBarGPR2a.Value = 5;
+            this.trackBarGPR2a.Scroll += new System.EventHandler(this.trackBarGPR2a_Scroll);
+            // 
+            // playButton
+            // 
+            this.playButton.Location = new System.Drawing.Point(13, 37);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(75, 23);
+            this.playButton.TabIndex = 12;
+            this.playButton.Text = "Play";
+            this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1254, 720);
-            this.Controls.Add(this.beatEval);
+            this.ClientSize = new System.Drawing.Size(854, 720);
+            this.Controls.Add(this.playButton);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.allProgressBar);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.beatEvaluation);
             this.Controls.Add(this.buttonGPR);
-            this.Controls.Add(this.experimentsButton);
+            this.Controls.Add(this.generateBeatAllButton);
             this.Controls.Add(this.beatDetectionButton);
-            this.Controls.Add(this.beat);
+            this.Controls.Add(this.generateAudioBeat);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.testButton);
+            this.Controls.Add(this.drawSpectrogramButton);
             this.Controls.Add(this.chartcontrol);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -296,6 +475,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR2b)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarGPR2a)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,16 +502,32 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chartcontrol;
         private System.Windows.Forms.ToolStripMenuItem analyzeMenu;
         private System.Windows.Forms.ToolStripMenuItem analyzeSTFTMenu;
-        private System.Windows.Forms.Button testButton;
+        private System.Windows.Forms.Button drawSpectrogramButton;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exMetricalWavMenu;
-        private System.Windows.Forms.Button beat;
+        private System.Windows.Forms.Button generateAudioBeat;
         private System.Windows.Forms.Button beatDetectionButton;
-        private System.Windows.Forms.Button experimentsButton;
+        private System.Windows.Forms.Button generateBeatAllButton;
         private System.Windows.Forms.Button buttonGPR;
-        private System.Windows.Forms.Button beatEval;
+        private System.Windows.Forms.Button beatEvaluation;
+        private System.Windows.Forms.ProgressBar allProgressBar;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TrackBar trackBarGPR2b;
+        private System.Windows.Forms.TrackBar trackBarGPR2a;
+        private System.Windows.Forms.TrackBar trackBarGPR3;
+        private System.Windows.Forms.TrackBar trackBarGPR5;
+        private System.Windows.Forms.Label labelGPR5;
+        private System.Windows.Forms.Label labelGPR3;
+        private System.Windows.Forms.Label labelGPR2b;
+        private System.Windows.Forms.Label labelGPR2a;
+        private System.Windows.Forms.Label labelGPR5Param;
+        private System.Windows.Forms.Label labelGPR3Param;
+        private System.Windows.Forms.Label labelGPR2bParam;
+        private System.Windows.Forms.Label labelGPR2aParam;
+        private System.Windows.Forms.Button playButton;
     }
 }
 
