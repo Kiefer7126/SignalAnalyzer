@@ -207,7 +207,7 @@ namespace SignalAnalyzer
                         ToHsv(plotData);
 
                         /* color */
-                        //spectrogramPen.Color = Color.FromArgb(red, green, blue);
+                        // spectrogramPen.Color = Color.FromArgb(red, green, blue);
 
 
                         /* monochrome */
@@ -635,7 +635,7 @@ namespace SignalAnalyzer
 
                 drawAxis(g, picture);
 
-                picture.Image.Save("C:/Users/sawada/Desktop/glcm.bmp");    
+                picture.Image.Save("C:/Users/sawada/Desktop/glcmDegree0.bmp");    
 
                 //Graphicsリソース解放
                 g.Dispose();

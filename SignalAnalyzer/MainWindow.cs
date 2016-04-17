@@ -494,8 +494,8 @@ namespace SignalAnalyzer
 
             // フィルタ処理
             //byte[,] filterdata = image.ReverseColor(data);
-
-            /* debug
+            
+            /* test data
             byte[,] data = {{ 0, 1, 2, 3, 4, 5 },
                            { 1, 2, 3, 4, 5, 4 },
                            { 2, 4, 5, 6, 5, 4 },
@@ -506,6 +506,7 @@ namespace SignalAnalyzer
             int[,] dataGLCM = image.CalcGLCM(data, 1, Direction.Degree0);
 
             /*
+            
             for (int i = 0; i < dataGLCM.GetLength(0); i++)
             {
                 for (int j = 0; j < dataGLCM.GetLength(1); j++)
@@ -513,8 +514,10 @@ namespace SignalAnalyzer
                     Console.Write(dataGLCM[j, i] + ",");
                 }
                 Console.Write("\n");
-            }
-            */
+           }
+           */ 
+            
+            
             var graph = new Graph();
             graph.DrawGLCM(this.pictureBox1, dataGLCM);
 

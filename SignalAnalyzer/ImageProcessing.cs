@@ -61,20 +61,60 @@ namespace SignalAnalyzer
                     }
                 }
 
-                //horizontal GLCM
                 if (direction == Direction.Degree0)
                 {
-                    for (int i = 0; i < xSize-1; i++)
+                    for (int i = 0; i < xSize - distance; i++)
                     {
                         for (int j = 0; j < ySize; j++)
                         {
                             density1 = data[i, j];
-                            density2 = data[i + 1, j];
+                            density2 = data[i + distance, j];
+
+                            dataGLCM[density1, density2]++;
+                        }
+                    }
+
+                }
+                else if (direction == Direction.Degree45)
+                {
+                    for (int i = 0; i < xSize - distance; i++)
+                    {
+                        for (int j = distance; j < ySize; j++)
+                        {
+                            density1 = data[i, j];
+                            density2 = data[i + distance, j - distance];
 
                             dataGLCM[density1, density2]++;
                         }
                     }
                 }
+                else if (direction == Direction.Degree90)
+                {
+                    for (int i = 0; i < xSize; i++)
+                    {
+                        for (int j = distance; j < ySize; j++)
+                        {
+                            density1 = data[i, j];
+                            density2 = data[i, j - distance];
+
+                            dataGLCM[density1, density2]++;
+                        }
+                    }
+                }
+                else if (direction == Direction.Degree135)
+                {
+                    for (int i = distance; i < xSize; i++)
+                    {
+                        for (int j = distance; j < ySize; j++)
+                        {
+                            density1 = data[i, j];
+                            density2 = data[i - distance, j - distance];
+
+                            dataGLCM[density1, density2]++;
+                        }
+                    }
+                }
+
                 return dataGLCM;
             }
             catch
