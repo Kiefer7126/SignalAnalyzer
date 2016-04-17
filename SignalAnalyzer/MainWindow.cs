@@ -12,6 +12,8 @@ using System.Windows.Forms;
 
 namespace SignalAnalyzer
 {
+    enum Direction { Degree0, Degree45, Degree90, Degree135 };
+
     public partial class MainWindow : Form
     {
         WavFile wavFile;
@@ -124,7 +126,7 @@ namespace SignalAnalyzer
 
         private void testButton_Click(object sender, EventArgs e)
         {
-            
+
             var importFile = new ImportFile();
             string fileName = importFile.OpenFileDialog(ImportFile.Formats.Wav);
             wavFile = importFile.ReadAudioWav(fileName);
@@ -320,7 +322,7 @@ namespace SignalAnalyzer
             pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
 
             //スペクトログラムの描画
-            
+
             gprGraph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, metricalStruct.aistToBeat(wavFile), freqAnalyzer.sumSpectoroInterval(metricalStruct), metricalStruct.BeatInterval, this.progressBar);
         }
 
@@ -343,14 +345,14 @@ namespace SignalAnalyzer
             var beatTime = importFile.ReadMetric(beatFileName);
             */
 
-            
+
 
             string[] correctFiles = System.IO.Directory.GetFiles(@"C:\Users\sawada\Desktop\AIST.RWC-MDB-P-2001.BEAT", "*", System.IO.SearchOption.AllDirectories);
             string[] beatFiles = System.IO.Directory.GetFiles(@"C:\Users\sawada\Music\20160128\DiscAll", "*", System.IO.SearchOption.AllDirectories);
-            
-                var beatEval = new List<List<double>>();
 
-                var intervalList = new List<string>();
+            var beatEval = new List<List<double>>();
+
+            var intervalList = new List<string>();
 
             for (int index = 0; index < correctFiles.Length; index++)
             {
@@ -395,18 +397,18 @@ namespace SignalAnalyzer
 
             int count = 0;
             var beatTracking = new Boolean[beatEval.Count];
-            for (int i = 0; i < beatEval.Count; i++ )
+            for (int i = 0; i < beatEval.Count; i++)
             {
                 beatTracking[i] = true;
 
                 if (beatEval[i].Count == 0) beatTracking[i] = false;
 
-                for(int j = 0; j < beatEval[i].Count; j++)
+                for (int j = 0; j < beatEval[i].Count; j++)
                 {
-                    if (beatEval[i][j] > 0.35 ) beatTracking[i] = false;
+                    if (beatEval[i][j] > 0.35) beatTracking[i] = false;
                 }
             }
-         }
+        }
 
         private void changeGPRValiable()
         {
@@ -419,7 +421,7 @@ namespace SignalAnalyzer
         private void trackBarGPR2a_Scroll(object sender, EventArgs e)
         {
             changeGPRValiable();
-            labelGPR2aParam.Text = "" + trackBarGPR2a.Value/10.0;
+            labelGPR2aParam.Text = "" + trackBarGPR2a.Value / 10.0;
 
         }
 
@@ -455,7 +457,7 @@ namespace SignalAnalyzer
 
         private void playButton_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         //WAVEファイルを再生する
@@ -482,5 +484,58 @@ namespace SignalAnalyzer
                 player = null;
             }
         }
-    } 
+
+        private void buttonGLCM_Click(object sender, EventArgs e)
+        {
+            var image = new ImageProcessing();
+
+            // 画像読み込み
+            byte[,] data = image.LoadByteImage("C:/Users/sawada/Desktop/test.bmp", this.progressBar);
+
+            // フィルタ処理
+            //byte[,] filterdata = image.ReverseColor(data);
+            
+            /* test data
+            byte[,] data = {{ 0, 1, 2, 3, 4, 5 },
+                           { 1, 2, 3, 4, 5, 4 },
+                           { 2, 4, 5, 6, 5, 4 },
+                           { 1, 3, 4, 2, 3, 4 },
+                           { 2, 3, 4, 5, 6, 2 }};
+            */
+
+            int[,] degree0GLCM = image.CalcGLCM(data, 1, Direction.Degree0);
+            int[,] degree45GLCM = image.CalcGLCM(data, 1, Direction.Degree45);
+            int[,] degree90GLCM = image.CalcGLCM(data, 1, Direction.Degree90);
+            int[,] degree135GLCM = image.CalcGLCM(data, 1, Direction.Degree135);
+
+            double[,] probabilityGLCM = image.NormalizeGLCM(degree0GLCM, degree45GLCM, degree90GLCM, degree135GLCM);
+
+
+            /*
+            for (int i = 0; i < probabilityGLCM.GetLength(0); i++)
+            {
+                for (int j = 0; j < probabilityGLCM.GetLength(1); j++)
+                {
+                    Console.Write(probabilityGLCM[j, i] + ",");
+                }
+                Console.Write("\n");
+           }
+           
+            */
+
+            image.AngularSecondMoment(probabilityGLCM);
+            image.Contrast(probabilityGLCM);
+            image.Mean(probabilityGLCM);
+            image.StandardDeviation(probabilityGLCM);
+            image.Entropy(probabilityGLCM);
+            image.InverseDifferentMoment(probabilityGLCM);
+
+            var graph = new Graph();
+            graph.DrawGLCM(this.pictureBox1, degree0GLCM);
+
+            // 画像保存
+            //image.SaveByteImage(filterdata, "C:/Users/sawada/Desktop/out.bmp");
+
+        }
+    }
 }
