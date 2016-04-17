@@ -505,6 +505,7 @@ namespace SignalAnalyzer
 
             int[,] dataGLCM = image.CalcGLCM(data, 1, Direction.Degree0);
 
+            /*
             for (int i = 0; i < dataGLCM.GetLength(0); i++)
             {
                 for (int j = 0; j < dataGLCM.GetLength(1); j++)
@@ -513,6 +514,10 @@ namespace SignalAnalyzer
                 }
                 Console.Write("\n");
             }
+            */
+            var graph = new Graph();
+            graph.DrawGLCM(this.pictureBox1, dataGLCM);
+
             // 画像保存
             //image.SaveByteImage(filterdata, "C:/Users/sawada/Desktop/out.bmp");
 

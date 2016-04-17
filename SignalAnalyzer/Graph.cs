@@ -207,11 +207,11 @@ namespace SignalAnalyzer
                         ToHsv(plotData);
 
                         /* color */
-                        spectrogramPen.Color = Color.FromArgb(red, green, blue);
+                        //spectrogramPen.Color = Color.FromArgb(red, green, blue);
 
 
                         /* monochrome */
-                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+                        spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
 
                         g.DrawLine(spectrogramPen,
                              (float)(xZero + xStep * (time - 1)),
@@ -576,6 +576,73 @@ namespace SignalAnalyzer
                     green = 255/2 - (plotHsvData % 255)/2;
                     blue = 0;
                     break;
+
+            }
+        }
+
+        public void DrawGLCM(PictureBox picture, int[,]data)
+        {
+            Graphics g;
+
+            initSpectrogram(picture);
+            try
+            {
+                picture.Refresh();
+                picture.Image = new Bitmap(picture.Width, picture.Height);
+                g = Graphics.FromImage(picture.Image);
+                myFont = new Font("Arial", 9);
+                spectrogramPen = new Pen(Color.FromArgb(0, 0, 0), penSize);
+
+                var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
+
+                //グラフの描画
+
+                float bottomUp, dataIntervalNomalization;
+                float penSizeHalf = penSize / 2;
+
+                for (int i = 1; i < data.GetLength(0); i++)
+                {
+                    for (int j = 1; j < data.GetLength(1); j++)
+                    {
+                        if (dataMax < data[i,j]) dataMax = (float)data[i,j];
+                        if (dataMin > data[i,j]) dataMin = (float)data[i,j];
+                    }
+                }
+
+                for(int j = 1; j < data.GetLength(0); j++)
+                {
+                    dataIntervalNomalization = 1 / (dataMax - dataMin);
+
+                    for (int i = 1; i < data.GetLength(1); i++)
+                    {
+                        plotData = (int)((data[j,i]) * 255 * 10 * dataIntervalNomalization);
+                        ToHsv(plotData);
+
+                        /* color */
+                        spectrogramPen.Color = Color.FromArgb(red, green, blue);
+
+
+                        /* monochrome */
+                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+
+                        g.DrawLine(spectrogramPen,
+                             (float)(xZero + 2 * (j - 1)),
+                             (float)(yZero - i * 2 - penSizeHalf),
+                             (float)(xZero + 2 * (j)),
+                             (float)(yZero - i * 2 - penSizeHalf));
+                    }
+                }
+
+                drawAxis(g, picture);
+
+                picture.Image.Save("C:/Users/sawada/Desktop/glcm.bmp");    
+
+                //Graphicsリソース解放
+                g.Dispose();
+                Console.WriteLine("Done draw!");
+            }
+            catch (Exception e)
+            {
 
             }
         }
