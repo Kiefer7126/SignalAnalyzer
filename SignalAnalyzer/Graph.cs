@@ -211,7 +211,7 @@ namespace SignalAnalyzer
 
 
                         /* monochrome */
-                        //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
+                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
 
                         g.DrawLine(spectrogramPen,
                              (float)(xZero + xStep * (time - 1)),

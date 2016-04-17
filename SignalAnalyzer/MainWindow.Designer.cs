@@ -71,6 +71,7 @@
             this.trackBarGPR2b = new System.Windows.Forms.TrackBar();
             this.trackBarGPR2a = new System.Windows.Forms.TrackBar();
             this.playButton = new System.Windows.Forms.Button();
+            this.buttonGLCM = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -449,11 +450,22 @@
             this.playButton.UseVisualStyleBackColor = true;
             this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
+            // buttonGLCM
+            // 
+            this.buttonGLCM.Location = new System.Drawing.Point(698, 424);
+            this.buttonGLCM.Name = "buttonGLCM";
+            this.buttonGLCM.Size = new System.Drawing.Size(116, 23);
+            this.buttonGLCM.TabIndex = 13;
+            this.buttonGLCM.Text = "GLCM";
+            this.buttonGLCM.UseVisualStyleBackColor = true;
+            this.buttonGLCM.Click += new System.EventHandler(this.buttonGLCM_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 720);
+            this.Controls.Add(this.buttonGLCM);
             this.Controls.Add(this.playButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.allProgressBar);
@@ -528,6 +540,7 @@
         private System.Windows.Forms.Label labelGPR2bParam;
         private System.Windows.Forms.Label labelGPR2aParam;
         private System.Windows.Forms.Button playButton;
+        private System.Windows.Forms.Button buttonGLCM;
     }
 }
 
