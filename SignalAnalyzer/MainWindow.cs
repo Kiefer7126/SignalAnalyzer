@@ -503,23 +503,35 @@ namespace SignalAnalyzer
                            { 2, 3, 4, 5, 6, 2 }};
             */
 
-            int[,] dataGLCM = image.CalcGLCM(data, 1, Direction.Degree0);
+            int[,] degree0GLCM = image.CalcGLCM(data, 1, Direction.Degree0);
+            int[,] degree45GLCM = image.CalcGLCM(data, 1, Direction.Degree45);
+            int[,] degree90GLCM = image.CalcGLCM(data, 1, Direction.Degree90);
+            int[,] degree135GLCM = image.CalcGLCM(data, 1, Direction.Degree135);
+
+            double[,] probabilityGLCM = image.NormalizeGLCM(degree0GLCM, degree45GLCM, degree90GLCM, degree135GLCM);
+
 
             /*
-            
-            for (int i = 0; i < dataGLCM.GetLength(0); i++)
+            for (int i = 0; i < probabilityGLCM.GetLength(0); i++)
             {
-                for (int j = 0; j < dataGLCM.GetLength(1); j++)
+                for (int j = 0; j < probabilityGLCM.GetLength(1); j++)
                 {
-                    Console.Write(dataGLCM[j, i] + ",");
+                    Console.Write(probabilityGLCM[j, i] + ",");
                 }
                 Console.Write("\n");
            }
-           */ 
-            
-            
+           
+            */
+
+            image.AngularSecondMoment(probabilityGLCM);
+            image.Contrast(probabilityGLCM);
+            image.Mean(probabilityGLCM);
+            image.StandardDeviation(probabilityGLCM);
+            image.Entropy(probabilityGLCM);
+            image.InverseDifferentMoment(probabilityGLCM);
+
             var graph = new Graph();
-            graph.DrawGLCM(this.pictureBox1, dataGLCM);
+            graph.DrawGLCM(this.pictureBox1, degree0GLCM);
 
             // 画像保存
             //image.SaveByteImage(filterdata, "C:/Users/sawada/Desktop/out.bmp");

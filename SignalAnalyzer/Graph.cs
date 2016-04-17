@@ -635,7 +635,7 @@ namespace SignalAnalyzer
 
                 drawAxis(g, picture);
 
-                picture.Image.Save("C:/Users/sawada/Desktop/glcmDegree0.bmp");    
+                picture.Image.Save("C:/Users/sawada/Desktop/glcmDegree.bmp");    
 
                 //Graphicsリソース解放
                 g.Dispose();

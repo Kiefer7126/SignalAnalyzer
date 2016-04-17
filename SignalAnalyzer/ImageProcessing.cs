@@ -123,6 +123,128 @@ namespace SignalAnalyzer
             }
         }
 
+        public double[,] NormalizeGLCM(int[,] data1, int[,] data2, int[,] data3, int[,] data4)
+        {
+            var probabilityGLCM = new double[data1.GetLength(0),data1.GetLength(1)];
+            double sum = 0;
+
+            for (int i = 0; i < probabilityGLCM.GetLength(0); i++)
+            {
+                for(int j = 0; j < probabilityGLCM.GetLength(1); j++)
+                {
+                    probabilityGLCM[i, j] = data1[i, j] + data2[i, j] + data3[i, j] + data4[i, j];
+                    sum += probabilityGLCM[i, j];
+                }
+            }
+
+            sum -= probabilityGLCM[0, 0];
+            for (int i = 0; i < probabilityGLCM.GetLength(0); i++)
+            {
+                for (int j = 0; j < probabilityGLCM.GetLength(1); j++)
+                {
+                    probabilityGLCM[i, j] = probabilityGLCM[i,j] / sum;
+                }
+            }
+                return probabilityGLCM;
+        }
+
+        public double AngularSecondMoment(double[,] data)
+        {
+            double angularSecondMoment = 0;
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    angularSecondMoment += data[i, j] * data[i, j];
+                }
+            }
+            Console.WriteLine("ASM:"+ angularSecondMoment);
+            return angularSecondMoment;
+        }
+
+        public double Contrast(double[,] data)
+        {
+            double contrast = 0;
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    contrast += (i - j) * (i - j) * data[i,j];
+                }
+            }
+            Console.WriteLine("Contrast:" + contrast);
+            return contrast;
+        }
+
+        public double Mean(double[,] data)
+        {
+            double mean = 0;
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    mean += i * data[i, j];
+                }
+            }
+            Console.WriteLine("Mean:" + mean);
+            return mean;
+        }
+
+        public double InverseDifferentMoment(double[,] data)
+        {
+            double idm = 0;
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    idm += data[i, j] / (1 + (i - j) * (i - j));
+                }
+            }
+            Console.WriteLine("IDM:" + idm);
+            return idm;
+        }
+
+
+        public double StandardDeviation(double[,] data)
+        {
+            double sd = 0;
+            double mean = Mean(data);
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    sd += (i - mean) * (i - mean) * data[i, j];
+                }
+            }
+
+            sd = Math.Sqrt(sd);
+
+            Console.WriteLine("SD:" + sd);
+            return sd;
+        }
+
+        public double Entropy(double[,] data)
+        {
+            double entropy = 0;
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    if(data[i,j] != 0 ) entropy += data[i,j] * Math.Log10(data[i, j]);
+                }
+            }
+
+            entropy = -entropy;
+            Console.WriteLine("Entropy:" + entropy);
+            return entropy;
+        }
+
         /// <summary>
         /// Bitmapをロードしbyte[,]配列で返す
         /// </summary>
