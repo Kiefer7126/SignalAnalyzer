@@ -72,6 +72,8 @@
             this.trackBarGPR2a = new System.Windows.Forms.TrackBar();
             this.playButton = new System.Windows.Forms.Button();
             this.buttonGLCM = new System.Windows.Forms.Button();
+            this.drawSpectrogramAllButton = new System.Windows.Forms.Button();
+            this.clusterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -107,9 +109,10 @@
             // 
             this.importMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.imAudioMenu,
-            this.imMetricalMenu});
+            this.imMetricalMenu,
+            this.clusterToolStripMenuItem});
             this.importMenu.Name = "importMenu";
-            this.importMenu.Size = new System.Drawing.Size(115, 22);
+            this.importMenu.Size = new System.Drawing.Size(152, 22);
             this.importMenu.Text = "Import";
             // 
             // imAudioMenu
@@ -118,7 +121,7 @@
             this.imAudioTextMenu,
             this.imAudiowavMenu});
             this.imAudioMenu.Name = "imAudioMenu";
-            this.imAudioMenu.Size = new System.Drawing.Size(120, 22);
+            this.imAudioMenu.Size = new System.Drawing.Size(152, 22);
             this.imAudioMenu.Text = "Audio";
             // 
             // imAudioTextMenu
@@ -138,7 +141,7 @@
             // imMetricalMenu
             // 
             this.imMetricalMenu.Name = "imMetricalMenu";
-            this.imMetricalMenu.Size = new System.Drawing.Size(120, 22);
+            this.imMetricalMenu.Size = new System.Drawing.Size(152, 22);
             this.imMetricalMenu.Text = "Metrical";
             this.imMetricalMenu.Click += new System.EventHandler(this.imMetricalMenu_Click);
             // 
@@ -148,7 +151,7 @@
             this.exAudioMenu,
             this.exMetricalMenu});
             this.exportMenu.Name = "exportMenu";
-            this.exportMenu.Size = new System.Drawing.Size(115, 22);
+            this.exportMenu.Size = new System.Drawing.Size(152, 22);
             this.exportMenu.Text = "Export";
             // 
             // exAudioMenu
@@ -460,11 +463,29 @@
             this.buttonGLCM.UseVisualStyleBackColor = true;
             this.buttonGLCM.Click += new System.EventHandler(this.buttonGLCM_Click);
             // 
+            // drawSpectrogramAllButton
+            // 
+            this.drawSpectrogramAllButton.Location = new System.Drawing.Point(682, 491);
+            this.drawSpectrogramAllButton.Name = "drawSpectrogramAllButton";
+            this.drawSpectrogramAllButton.Size = new System.Drawing.Size(146, 23);
+            this.drawSpectrogramAllButton.TabIndex = 14;
+            this.drawSpectrogramAllButton.Text = "DrawSpectrogramAll";
+            this.drawSpectrogramAllButton.UseVisualStyleBackColor = true;
+            this.drawSpectrogramAllButton.Click += new System.EventHandler(this.drawSpectrogramAllButton_Click);
+            // 
+            // clusterToolStripMenuItem
+            // 
+            this.clusterToolStripMenuItem.Name = "clusterToolStripMenuItem";
+            this.clusterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clusterToolStripMenuItem.Text = "Cluster";
+            this.clusterToolStripMenuItem.Click += new System.EventHandler(this.clusterToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 720);
+            this.Controls.Add(this.drawSpectrogramAllButton);
             this.Controls.Add(this.buttonGLCM);
             this.Controls.Add(this.playButton);
             this.Controls.Add(this.groupBox1);
@@ -541,6 +562,8 @@
         private System.Windows.Forms.Label labelGPR2aParam;
         private System.Windows.Forms.Button playButton;
         private System.Windows.Forms.Button buttonGLCM;
+        private System.Windows.Forms.Button drawSpectrogramAllButton;
+        private System.Windows.Forms.ToolStripMenuItem clusterToolStripMenuItem;
     }
 }
 

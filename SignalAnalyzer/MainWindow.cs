@@ -18,6 +18,7 @@ namespace SignalAnalyzer
     {
         WavFile wavFile;
         MetricalStructure metricalStruct;
+        ChorusStructure chorusStruct;
         Graph gprGraph;
 
         private System.Media.SoundPlayer player = null;
@@ -27,6 +28,7 @@ namespace SignalAnalyzer
             InitializeComponent();
             wavFile = new WavFile();
             metricalStruct = new MetricalStructure();
+            chorusStruct = new ChorusStructure();
 
             allProgressBar.Minimum = 0;
             allProgressBar.Maximum = 3; //処理の数
@@ -487,55 +489,119 @@ namespace SignalAnalyzer
 
         private void buttonGLCM_Click(object sender, EventArgs e)
         {
-            var image = new ImageProcessing();
 
-            // 画像読み込み
-            byte[,] data = image.LoadByteImage("C:/Users/sawada/Desktop/test.bmp", this.progressBar);
-
-            // フィルタ処理
-            //byte[,] filterdata = image.ReverseColor(data);
-            
-            /* test data
-            byte[,] data = {{ 0, 1, 2, 3, 4, 5 },
-                           { 1, 2, 3, 4, 5, 4 },
-                           { 2, 4, 5, 6, 5, 4 },
-                           { 1, 3, 4, 2, 3, 4 },
-                           { 2, 3, 4, 5, 6, 2 }};
-            */
-
-            int[,] degree0GLCM = image.CalcGLCM(data, 1, Direction.Degree0);
-            int[,] degree45GLCM = image.CalcGLCM(data, 1, Direction.Degree45);
-            int[,] degree90GLCM = image.CalcGLCM(data, 1, Direction.Degree90);
-            int[,] degree135GLCM = image.CalcGLCM(data, 1, Direction.Degree135);
-
-            double[,] probabilityGLCM = image.NormalizeGLCM(degree0GLCM, degree45GLCM, degree90GLCM, degree135GLCM);
-
-
+            var importFile = new ImportFile();
+            wavFile = importFile.ReadAudioWav("C:/Users/sawada/Music/RWC研究用音楽データベース Disc 1/01 永遠のレプリカ.wav");
             /*
-            for (int i = 0; i < probabilityGLCM.GetLength(0); i++)
-            {
-                for (int j = 0; j < probabilityGLCM.GetLength(1); j++)
-                {
-                    Console.Write(probabilityGLCM[j, i] + ",");
-                }
-                Console.Write("\n");
-           }
-           
+            var freqAnalyzer = new FrequencyAnalyzer();
+            freqAnalyzer.STFT(wavFile.RightData, this.progressBar);
             */
 
-            image.AngularSecondMoment(probabilityGLCM);
-            image.Contrast(probabilityGLCM);
-            image.Mean(probabilityGLCM);
-            image.StandardDeviation(probabilityGLCM);
-            image.Entropy(probabilityGLCM);
-            image.InverseDifferentMoment(probabilityGLCM);
+            metricalStruct = importFile.ReadMetric("C:/Users/sawada/Desktop/AIST.RWC-MDB-P-2001.BEAT/RM-P001.BEAT.txt");
+            //var metric = new int[wavFile.RightData.Length];
+            //metric = metricalStruct.aistToBeat(wavFile);
 
             var graph = new Graph();
-            graph.DrawGLCM(this.pictureBox1, degree0GLCM);
+            //graph.DrawSpectrogram(this.pictureBox1, freqAnalyzer, null, null, 0, this.progressBar);
+
+            // 画像読み込み
+            var image = new ImageProcessing();
+            byte[,] data = image.LoadByteImage("C:/Users/sawada/Desktop/test.bmp", this.progressBar);
+
+
+            Console.WriteLine("start:" + metricalStruct.RightTime[0]);
+            Console.WriteLine("end:" + metricalStruct.RightTime[1]);
+
+            var featureMatrixGLCM = new double[metricalStruct.RightTime.Length/2][];
+
+            Console.WriteLine("metric.Length:"+metricalStruct.RightTime.Length/2);
+
+            for (int i = 0; i < featureMatrixGLCM.Length; i++)
+            {
+                int[,] degree0GLCM = image.CalcGLCM(data, 1, Direction.Degree0, metricalStruct.RightTime[i] , metricalStruct.RightTime[i + 1]);
+                int[,] degree45GLCM = image.CalcGLCM(data, 1, Direction.Degree45, metricalStruct.RightTime[i], metricalStruct.RightTime[i + 1]);
+                int[,] degree90GLCM = image.CalcGLCM(data, 1, Direction.Degree90, metricalStruct.RightTime[i], metricalStruct.RightTime[i + 1]);
+                int[,] degree135GLCM = image.CalcGLCM(data, 1, Direction.Degree135, metricalStruct.RightTime[i] , metricalStruct.RightTime[i + 1]);
+
+                double[,] probabilityGLCM = image.NormalizeGLCM(degree0GLCM, degree45GLCM, degree90GLCM, degree135GLCM);
+
+                var featureVectorGLCM = new double[] {
+             image.AngularSecondMoment(probabilityGLCM),
+            image.Contrast(probabilityGLCM),
+            image.Mean(probabilityGLCM),
+            image.StandardDeviation(probabilityGLCM),
+            image.Entropy(probabilityGLCM),
+            image.InverseDifferentMoment(probabilityGLCM)
+                    };
+
+                featureMatrixGLCM[i] = featureVectorGLCM;
+
+                //graph.DrawGLCM(this.pictureBox1, degree0GLCM);
+            }
+
+            var exportFile = new ExportFile();
+            string fileName = exportFile.SaveFileDialog(ExportFile.Formats.Text);
+            exportFile.WriteGLCMText(featureMatrixGLCM, fileName);
 
             // 画像保存
             //image.SaveByteImage(filterdata, "C:/Users/sawada/Desktop/out.bmp");
 
         }
+
+        private void drawSpectrogramAllButton_Click(object sender, EventArgs e)
+        {
+
+            string[] beatFileNames = System.IO.Directory.GetFiles(@"C:\Users\sawada\Desktop\AIST.RWC-MDB-P-2001.BEAT/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames1 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 1/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames2 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 2/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames3 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 3/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames4 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 4/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames5 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 5/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames6 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 6/", "*", System.IO.SearchOption.AllDirectories);
+            string[] wavFileNames7 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Music/RWC研究用音楽データベース Disc 7/", "*", System.IO.SearchOption.AllDirectories);
+
+            //storeSpectrogram(wavFileNames1, "disc 1/");
+            //storeSpectrogram(wavFileNames2, "disc 2/");
+            //storeSpectrogram(wavFileNames3, "disc 3/");
+            //storeSpectrogram(wavFileNames4, "disc 4/");
+            //storeSpectrogram(wavFileNames5, "disc 5/");
+            //storeSpectrogram(wavFileNames6, "disc 6/");
+            storeSpectrogram(wavFileNames7, "disc 7/");
+
+        }
+
+        private void storeSpectrogram(string[] fileNames, string disc)
+        {
+
+            for (int i = 5; i < fileNames.Length-1; i++)
+            {
+                var importFile = new ImportFile();
+                var graph = new Graph();
+                var freqAnalyzer = new FrequencyAnalyzer();
+                var wav = new WavFile();
+
+                wav = importFile.ReadAudioWav(fileNames[i]);
+                //metricalStruct = importFile.ReadMetric(beatFileNames[i]);
+
+                freqAnalyzer.STFT(wav.RightData, this.progressBar);
+
+                //スクロールバーが表示されるようにする
+                this.panel1.AutoScroll = true;
+
+                //PictureBoxの大きさが変更させるようにする
+                pictureBox1.Size = new Size(freqAnalyzer.stftData.Length, freqAnalyzer.stftData[0].Length / 4);
+
+                graph.ExportSpectrogram(this.pictureBox1, freqAnalyzer, this.progressBar, disc + (i+1));
+
+            }
+        }
+
+        private void clusterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var import = new ImportFile();
+            chorusStruct = import.ReadTruthCluster("C:/Users/sawada/Desktop/AIST.RWC-MDB-P-2001.CHORUS/RM-P001.CHORUS.txt");
+            chorusStruct.chorusToBeat(metricalStruct);
+        }
+
     }
 }

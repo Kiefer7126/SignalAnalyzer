@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeatDetection.cs" />
+    <Compile Include="ChorusStructure.cs" />
     <Compile Include="ExportFile.cs" />
     <Compile Include="FrequencyAnalyzer.cs" />
     <Compile Include="GenerateWave.cs" />

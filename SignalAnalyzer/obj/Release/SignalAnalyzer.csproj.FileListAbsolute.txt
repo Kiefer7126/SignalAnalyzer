@@ -1,0 +1,9 @@
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\bin\Release\SignalAnalyzer.exe.config
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\bin\Release\SignalAnalyzer.exe
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\bin\Release\SignalAnalyzer.pdb
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.csprojResolveAssemblyReference.cache
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.MainWindow.resources
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.Properties.Resources.resources
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.csproj.GenerateResource.Cache
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.exe
+C:\Users\sawada\cs\SignalAnalyzer\SignalAnalyzer\obj\Release\SignalAnalyzer.pdb

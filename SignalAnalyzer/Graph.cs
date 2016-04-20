@@ -224,7 +224,7 @@ namespace SignalAnalyzer
 
                 drawAxis(g, picture);
 
-                picture.Image.Save("C:/Users/sawada/Desktop/test.bmp");
+                //picture.Image.Save("C:/Users/sawada/Desktop/test.bmp");
 
                 var beatDetection = new BeatDetection();
                 var beat = beatDetection.main(freq);
@@ -233,6 +233,75 @@ namespace SignalAnalyzer
 
                 if (metric != null) drawMetricStructure(g, metric, divStftData, freq, beatInterval, beat);
                 this.beatInterval = beatInterval;
+
+                //Graphicsリソース解放
+                g.Dispose();
+                Console.WriteLine("Done draw!");
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
+        public void ExportSpectrogram(PictureBox picture, FrequencyAnalyzer freq, ProgressBar progressBar, String name)
+        {
+            Graphics g;
+
+            initSpectrogram(picture);
+
+            progressBar.Minimum = 0;
+            progressBar.Maximum = freq.stftData.Length;
+            progressBar.Value = 0;
+            try
+            {
+                picture.Refresh();
+                picture.Image = new Bitmap(picture.Width, picture.Height);
+                g = Graphics.FromImage(picture.Image);
+                myFont = new Font("Arial", 9);
+                spectrogramPen = new Pen(Color.FromArgb(0, 0, 0), penSize);
+
+                var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
+
+                //グラフの描画
+
+                float bottomUp, dataIntervalNomalization;
+                float penSizeHalf = penSize / 2;
+
+                for (int time = 1; time < freq.stftData.Length - 1; time++)
+                {
+                    for (int i = 0; i < freq.stftData[0].Length; i++)
+                    {
+                        if (dataMax < freq.stftData[time][i]) dataMax = (float)freq.stftData[time][i];
+                        if (dataMin > freq.stftData[time][i]) dataMin = (float)freq.stftData[time][i];
+                    }
+
+                    dataIntervalNomalization = 1 / (dataMax - dataMin);
+                    bottomUp = System.Math.Abs(dataMin);
+
+                    for (int i = 0; i < freq.stftData[0].Length / 4; i++)
+                    {
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 10 * dataIntervalNomalization);
+                        ToHsv(plotData);
+
+                        /* color */
+                        // spectrogramPen.Color = Color.FromArgb(red, green, blue);
+
+
+                        /* monochrome */
+                        spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+
+                        g.DrawLine(spectrogramPen,
+                             (float)(xStep * (time - 1)),
+                             (float)(picture.Height - i * yStep - penSizeHalf),
+                             (float)(xStep * (time)),
+                             (float)(picture.Height - i * yStep - penSizeHalf));
+                    }
+                    progressBar.Value = time;
+                }
+
+                picture.Image.Save("C:/Users/sawada/Desktop/spectrogram/"+name+".bmp");
 
                 //Graphicsリソース解放
                 g.Dispose();

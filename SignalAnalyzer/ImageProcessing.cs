@@ -40,11 +40,12 @@ namespace SignalAnalyzer
             }
         }
 
-        public int[,] CalcGLCM(byte[,] data, int distance, Direction direction)
+        public int[,] CalcGLCM(byte[,] data, int distance, Direction direction, int startPixel, int endPixel)
         {
             try
             {
-                int xSize = data.GetLength(0);
+                //int xSize = data.GetLength(0);
+                int xSize = endPixel - startPixel;
                 int ySize = data.GetLength(1);
 
                 int density1 = 0;
@@ -63,7 +64,7 @@ namespace SignalAnalyzer
 
                 if (direction == Direction.Degree0)
                 {
-                    for (int i = 0; i < xSize - distance; i++)
+                    for (int i = startPixel; i < endPixel - distance; i++)
                     {
                         for (int j = 0; j < ySize; j++)
                         {
@@ -77,7 +78,7 @@ namespace SignalAnalyzer
                 }
                 else if (direction == Direction.Degree45)
                 {
-                    for (int i = 0; i < xSize - distance; i++)
+                    for (int i = startPixel; i < endPixel - distance; i++)
                     {
                         for (int j = distance; j < ySize; j++)
                         {
@@ -90,7 +91,7 @@ namespace SignalAnalyzer
                 }
                 else if (direction == Direction.Degree90)
                 {
-                    for (int i = 0; i < xSize; i++)
+                    for (int i = startPixel; i < endPixel; i++)
                     {
                         for (int j = distance; j < ySize; j++)
                         {
@@ -103,7 +104,7 @@ namespace SignalAnalyzer
                 }
                 else if (direction == Direction.Degree135)
                 {
-                    for (int i = distance; i < xSize; i++)
+                    for (int i = startPixel + distance; i < endPixel; i++)
                     {
                         for (int j = distance; j < ySize; j++)
                         {
@@ -207,7 +208,6 @@ namespace SignalAnalyzer
             Console.WriteLine("IDM:" + idm);
             return idm;
         }
-
 
         public double StandardDeviation(double[,] data)
         {
