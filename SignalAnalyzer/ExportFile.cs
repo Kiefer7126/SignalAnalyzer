@@ -218,7 +218,7 @@ namespace SignalAnalyzer
                         sw.Write("\n");
                         for (int i = 1; i < data.Length; i++)
                         {
-                            sw.Write(i*10);
+                            sw.Write(i*100);
                             sw.Write("\t");
 
                             for (int j = 0; j < data[i].Length; j++)
@@ -231,6 +231,35 @@ namespace SignalAnalyzer
                             }
                             sw.Write("\n");
                         }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error writing data: {0}.", e.GetType().Name);
+                }
+                return true;
+            }
+        }
+
+
+        public Boolean WriteChorusTruthText(int[] chorusStruct, string fileName)
+        {
+            string writeFileName = fileName;
+
+            if (writeFileName == "" || writeFileName == null) return false;
+            else
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(writeFileName))
+                    {
+                        for (int i = 1; i < chorusStruct.Length; i++)
+                        {
+                            sw.Write(chorusStruct[i]);
+                            sw.Write("\n");
+                        }
+                        
+                            
                     }
                 }
                 catch (Exception e)

@@ -160,7 +160,7 @@ namespace SignalAnalyzer
                     angularSecondMoment += data[i, j] * data[i, j];
                 }
             }
-            Console.WriteLine("ASM:"+ angularSecondMoment);
+            //Console.WriteLine("ASM:"+ angularSecondMoment);
             return angularSecondMoment;
         }
 
@@ -175,7 +175,7 @@ namespace SignalAnalyzer
                     contrast += (i - j) * (i - j) * data[i,j];
                 }
             }
-            Console.WriteLine("Contrast:" + contrast);
+            //Console.WriteLine("Contrast:" + contrast);
             return contrast;
         }
 
@@ -190,7 +190,7 @@ namespace SignalAnalyzer
                     mean += i * data[i, j];
                 }
             }
-            Console.WriteLine("Mean:" + mean);
+            //Console.WriteLine("Mean:" + mean);
             return mean;
         }
 
@@ -205,7 +205,7 @@ namespace SignalAnalyzer
                     idm += data[i, j] / (1 + (i - j) * (i - j));
                 }
             }
-            Console.WriteLine("IDM:" + idm);
+            //Console.WriteLine("IDM:" + idm);
             return idm;
         }
 
@@ -224,7 +224,7 @@ namespace SignalAnalyzer
 
             sd = Math.Sqrt(sd);
 
-            Console.WriteLine("SD:" + sd);
+            //Console.WriteLine("SD:" + sd);
             return sd;
         }
 
@@ -241,7 +241,7 @@ namespace SignalAnalyzer
             }
 
             entropy = -entropy;
-            Console.WriteLine("Entropy:" + entropy);
+            //Console.WriteLine("Entropy:" + entropy);
             return entropy;
         }
 

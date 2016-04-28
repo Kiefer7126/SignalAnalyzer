@@ -154,6 +154,21 @@ namespace SignalAnalyzer
             return chorusStructure;
         }
 
+        public string[] ReadGroupingStructure(string FileName, string type)
+        {
+            string[] groupingStructure;
+            if (type == "system")
+            {
+                groupingStructure = ReadText(Formats.Text, FileName).Where(c => c != "").ToArray();
+                groupingStructure = groupingStructure.Where(c => c != "\"x\"").ToArray();
+            }
+            else
+            {
+                groupingStructure = ReadText(Formats.Text, FileName);
+            }
+            return groupingStructure;
+        }
+
         /**
          * ReadAudioWav
          * 概要：音楽データ.wavを読み込む

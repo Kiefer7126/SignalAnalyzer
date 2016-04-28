@@ -31,10 +31,13 @@ namespace SignalAnalyzer
             get { return this.label; }
         }
 
-        public string[] chorusToBeat(MetricalStructure metric)
+        public int[] chorusToBeat(MetricalStructure metric)
         {
-            var truthCluster = new string[metric.RightTime.Length];
-            string tempLabel = Label[0];
+            var truthCluster = new int[metric.RightTime.Length];
+            //string tempLabel = Label[0];
+            
+            int tempLabel = 1;
+ 
             int j = 0;
 
             for (int i = 0; i < truthCluster.Length; i++)
@@ -42,7 +45,7 @@ namespace SignalAnalyzer
                 truthCluster[i] = tempLabel;
                 if (endTime[j] == metric.RightTime[i]) //スペクトログラム(j: 4分音符レベル)
                 {
-                    tempLabel = Label[j+1];
+                   tempLabel++;
                     j++;
                 }
             }

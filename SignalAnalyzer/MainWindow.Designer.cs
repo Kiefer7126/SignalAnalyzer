@@ -38,6 +38,7 @@
             this.imAudioTextMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.imAudiowavMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.imMetricalMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.clusterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exAudioMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.exAudioTextMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,7 +74,8 @@
             this.playButton = new System.Windows.Forms.Button();
             this.buttonGLCM = new System.Windows.Forms.Button();
             this.drawSpectrogramAllButton = new System.Windows.Forms.Button();
-            this.clusterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.truthChorusbutton = new System.Windows.Forms.Button();
+            this.fMeasureButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartcontrol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -144,6 +146,13 @@
             this.imMetricalMenu.Size = new System.Drawing.Size(152, 22);
             this.imMetricalMenu.Text = "Metrical";
             this.imMetricalMenu.Click += new System.EventHandler(this.imMetricalMenu_Click);
+            // 
+            // clusterToolStripMenuItem
+            // 
+            this.clusterToolStripMenuItem.Name = "clusterToolStripMenuItem";
+            this.clusterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clusterToolStripMenuItem.Text = "Cluster";
+            this.clusterToolStripMenuItem.Click += new System.EventHandler(this.clusterToolStripMenuItem_Click);
             // 
             // exportMenu
             // 
@@ -473,18 +482,33 @@
             this.drawSpectrogramAllButton.UseVisualStyleBackColor = true;
             this.drawSpectrogramAllButton.Click += new System.EventHandler(this.drawSpectrogramAllButton_Click);
             // 
-            // clusterToolStripMenuItem
+            // truthChorusbutton
             // 
-            this.clusterToolStripMenuItem.Name = "clusterToolStripMenuItem";
-            this.clusterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.clusterToolStripMenuItem.Text = "Cluster";
-            this.clusterToolStripMenuItem.Click += new System.EventHandler(this.clusterToolStripMenuItem_Click);
+            this.truthChorusbutton.Location = new System.Drawing.Point(698, 462);
+            this.truthChorusbutton.Name = "truthChorusbutton";
+            this.truthChorusbutton.Size = new System.Drawing.Size(116, 23);
+            this.truthChorusbutton.TabIndex = 4;
+            this.truthChorusbutton.Text = "TruthChorus";
+            this.truthChorusbutton.UseVisualStyleBackColor = true;
+            this.truthChorusbutton.Click += new System.EventHandler(this.truthChorusbutton_Click);
+            // 
+            // fMeasureButton
+            // 
+            this.fMeasureButton.Location = new System.Drawing.Point(720, 37);
+            this.fMeasureButton.Name = "fMeasureButton";
+            this.fMeasureButton.Size = new System.Drawing.Size(75, 23);
+            this.fMeasureButton.TabIndex = 15;
+            this.fMeasureButton.Text = "F-Measure";
+            this.fMeasureButton.UseVisualStyleBackColor = true;
+            this.fMeasureButton.Click += new System.EventHandler(this.fMeasureButton_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 720);
+            this.Controls.Add(this.fMeasureButton);
+            this.Controls.Add(this.truthChorusbutton);
             this.Controls.Add(this.drawSpectrogramAllButton);
             this.Controls.Add(this.buttonGLCM);
             this.Controls.Add(this.playButton);
@@ -564,6 +588,8 @@
         private System.Windows.Forms.Button buttonGLCM;
         private System.Windows.Forms.Button drawSpectrogramAllButton;
         private System.Windows.Forms.ToolStripMenuItem clusterToolStripMenuItem;
+        private System.Windows.Forms.Button truthChorusbutton;
+        private System.Windows.Forms.Button fMeasureButton;
     }
 }
 
