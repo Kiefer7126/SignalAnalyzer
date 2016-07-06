@@ -491,13 +491,13 @@ namespace SignalAnalyzer
         {
             string[] beatFileNames = System.IO.Directory.GetFiles(@"C:\Users\sawada\Desktop\AIST.RWC-MDB-P-2001.BEAT/", "*", System.IO.SearchOption.AllDirectories);
 
-            string[] spectrogramNames1 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 1/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames2 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 2/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames3 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 3/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames4 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 4/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames5 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 5/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames6 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 6/", "*", System.IO.SearchOption.AllDirectories);
-            string[] spectrogramNames7 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/spectrogram/Disc 7/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames1 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 1/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames2 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 2/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames3 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 3/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames4 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 4/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames5 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 5/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames6 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 6/", "*", System.IO.SearchOption.AllDirectories);
+            string[] spectrogramNames7 = System.IO.Directory.GetFiles(@"C:/Users/sawada/Desktop/実験データ/spectrogram/Disc 7/", "*", System.IO.SearchOption.AllDirectories);
 
             //wavFile = importFile.ReadAudioWav("C:/Users/sawada/Music/RWC研究用音楽データベース Disc 1/01 永遠のレプリカ.wav");
 

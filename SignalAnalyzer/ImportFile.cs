@@ -250,7 +250,7 @@ namespace SignalAnalyzer
                             //wavFile.dataID = br.ReadBytes(4);
                             wavFile.dataSize = br.ReadUInt32();
 
-                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize / 2; //4分の1サイズ
+                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize / 2 / 8; //4分の1サイズ
 
                             int[] rightDataArray = new int[dataArrayLength];
                             int[] leftDataArray = new int[dataArrayLength];

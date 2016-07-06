@@ -203,15 +203,15 @@ namespace SignalAnalyzer
 
                     for (int i = 0; i < freq.stftData[0].Length / 4; i++)
                     {
-                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 10 * dataIntervalNomalization);
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 11 * dataIntervalNomalization);
                         ToHsv(plotData);
 
                         /* color */
-                        // spectrogramPen.Color = Color.FromArgb(red, green, blue);
+                         spectrogramPen.Color = Color.FromArgb(red, green, blue);
 
 
                         /* monochrome */
-                        spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
 
                         g.DrawLine(spectrogramPen,
                              (float)(xZero + xStep * (time - 1)),
@@ -224,7 +224,7 @@ namespace SignalAnalyzer
 
                 drawAxis(g, picture);
 
-                //picture.Image.Save("C:/Users/sawada/Desktop/test.bmp");
+                picture.Image.Save("C:/Users/sawada/Desktop/test.bmp");
 
                 var beatDetection = new BeatDetection();
                 var beat = beatDetection.main(freq);
@@ -566,6 +566,46 @@ namespace SignalAnalyzer
          * @return なし
          */
 
+        /*
+      public void ToHsv(int plotHsvData)
+        {
+            switch (plotHsvData / 255)
+            {
+                case 0:
+                    red = 0;
+                    green = 0;
+                    blue = 0 + (plotHsvData % 255);
+                    break;
+               
+                case 1:
+                    red = 0;
+                    green = 0 + (plotHsvData % 255);
+                    blue = 255;
+                    break;
+        
+                case 2:
+                    red = 0;
+                    green = 255;
+                    blue = 255 - (plotHsvData % 255);
+                    break;
+                   
+                case 3:
+                    red = 0 + (plotHsvData % 255);
+                    green = 255;
+                    blue = 0;
+                    break;
+
+                case 4:
+                    red = 255;
+                    green = 255 - (plotHsvData % 255);
+                    blue = 0;
+                    break;
+
+            }
+        }
+        */
+
+        
         public void ToHsv(int plotHsvData)
         {
             switch (plotHsvData / 255)
@@ -613,7 +653,7 @@ namespace SignalAnalyzer
                     green = 0 + (plotHsvData % 255)/2;
                     blue = 255 - (plotHsvData % 255);
                     break;
-
+        
                 /*
             case 4:
                 red = 0+ (plotHsvData % 255);
@@ -628,6 +668,8 @@ namespace SignalAnalyzer
                     blue = 255 - (plotHsvData % 255);
                     break;
                     */
+
+        
                 case 7:
                     red = 0 + (plotHsvData % 255);
                     green = 255 / 2 + (plotHsvData % 255)/2;
@@ -646,8 +688,16 @@ namespace SignalAnalyzer
                     blue = 0;
                     break;
 
+                case 10:
+                    red = 255 - (plotHsvData % 255) / 2;
+                    green = 0;
+                    blue = 0;
+                    break;
+
             }
         }
+        
+        
 
         public void DrawGLCM(PictureBox picture, int[,]data)
         {
