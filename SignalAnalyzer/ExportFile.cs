@@ -189,5 +189,86 @@ namespace SignalAnalyzer
                 return true;
             }
         }
+
+        public Boolean WriteGLCMText(double[][] data, string fileName)
+        {
+            string writeFileName = fileName;
+
+            if (writeFileName == "" || writeFileName == null) return false;
+            else
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(writeFileName))
+                    {
+                        sw.Write("No.");
+                        sw.Write("\t");
+                        sw.Write("ASM");
+                        sw.Write("\t");
+                        sw.Write("Contrast");
+                        sw.Write("\t");
+                        sw.Write("Mean");
+                        sw.Write("\t");
+                        sw.Write("SD");
+                        sw.Write("\t");
+                        sw.Write("Entropy");
+                        sw.Write("\t");
+                        sw.Write("IDM");
+                        sw.Write("\t");
+                        sw.Write("\n");
+                        for (int i = 1; i < data.Length; i++)
+                        {
+                            sw.Write(i*100);
+                            sw.Write("\t");
+
+                            for (int j = 0; j < data[i].Length; j++)
+                            {
+                                if (data[i][j] != 0)
+                                {
+                                    sw.Write(data[i][j]);
+                                    sw.Write("\t");
+                                }
+                            }
+                            sw.Write("\n");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error writing data: {0}.", e.GetType().Name);
+                }
+                return true;
+            }
+        }
+
+
+        public Boolean WriteChorusTruthText(int[] chorusStruct, string fileName)
+        {
+            string writeFileName = fileName;
+
+            if (writeFileName == "" || writeFileName == null) return false;
+            else
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(writeFileName))
+                    {
+                        for (int i = 1; i < chorusStruct.Length; i++)
+                        {
+                            sw.Write(chorusStruct[i]);
+                            sw.Write("\n");
+                        }
+                        
+                            
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error writing data: {0}.", e.GetType().Name);
+                }
+                return true;
+            }
+        }
+
     }
 }

@@ -203,15 +203,15 @@ namespace SignalAnalyzer
 
                     for (int i = 0; i < freq.stftData[0].Length / 4; i++)
                     {
-                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 10 * dataIntervalNomalization);
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 11 * dataIntervalNomalization);
                         ToHsv(plotData);
 
                         /* color */
-                        spectrogramPen.Color = Color.FromArgb(red, green, blue);
+                         spectrogramPen.Color = Color.FromArgb(red, green, blue);
 
 
                         /* monochrome */
-                        //pen.Color = Color.FromArgb(plotData / 5, plotData / 5, plotData / 5);
+                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
 
                         g.DrawLine(spectrogramPen,
                              (float)(xZero + xStep * (time - 1)),
@@ -233,6 +233,75 @@ namespace SignalAnalyzer
 
                 if (metric != null) drawMetricStructure(g, metric, divStftData, freq, beatInterval, beat);
                 this.beatInterval = beatInterval;
+
+                //Graphicsリソース解放
+                g.Dispose();
+                Console.WriteLine("Done draw!");
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
+        public void ExportSpectrogram(PictureBox picture, FrequencyAnalyzer freq, ProgressBar progressBar, String name)
+        {
+            Graphics g;
+
+            initSpectrogram(picture);
+
+            progressBar.Minimum = 0;
+            progressBar.Maximum = freq.stftData.Length;
+            progressBar.Value = 0;
+            try
+            {
+                picture.Refresh();
+                picture.Image = new Bitmap(picture.Width, picture.Height);
+                g = Graphics.FromImage(picture.Image);
+                myFont = new Font("Arial", 9);
+                spectrogramPen = new Pen(Color.FromArgb(0, 0, 0), penSize);
+
+                var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
+
+                //グラフの描画
+
+                float bottomUp, dataIntervalNomalization;
+                float penSizeHalf = penSize / 2;
+
+                for (int time = 1; time < freq.stftData.Length - 1; time++)
+                {
+                    for (int i = 0; i < freq.stftData[0].Length; i++)
+                    {
+                        if (dataMax < freq.stftData[time][i]) dataMax = (float)freq.stftData[time][i];
+                        if (dataMin > freq.stftData[time][i]) dataMin = (float)freq.stftData[time][i];
+                    }
+
+                    dataIntervalNomalization = 1 / (dataMax - dataMin);
+                    bottomUp = System.Math.Abs(dataMin);
+
+                    for (int i = 0; i < freq.stftData[0].Length / 4; i++)
+                    {
+                        plotData = (int)((freq.stftData[time][i] + bottomUp) * 255 * 10 * dataIntervalNomalization);
+                        ToHsv(plotData);
+
+                        /* color */
+                        // spectrogramPen.Color = Color.FromArgb(red, green, blue);
+
+
+                        /* monochrome */
+                        spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+
+                        g.DrawLine(spectrogramPen,
+                             (float)(xStep * (time - 1)),
+                             (float)(picture.Height - i * yStep - penSizeHalf),
+                             (float)(xStep * (time)),
+                             (float)(picture.Height - i * yStep - penSizeHalf));
+                    }
+                    progressBar.Value = time;
+                }
+
+                picture.Image.Save("C:/Users/sawada/Desktop/spectrogram/"+name+".bmp");
 
                 //Graphicsリソース解放
                 g.Dispose();
@@ -497,6 +566,46 @@ namespace SignalAnalyzer
          * @return なし
          */
 
+        /*
+      public void ToHsv(int plotHsvData)
+        {
+            switch (plotHsvData / 255)
+            {
+                case 0:
+                    red = 0;
+                    green = 0;
+                    blue = 0 + (plotHsvData % 255);
+                    break;
+               
+                case 1:
+                    red = 0;
+                    green = 0 + (plotHsvData % 255);
+                    blue = 255;
+                    break;
+        
+                case 2:
+                    red = 0;
+                    green = 255;
+                    blue = 255 - (plotHsvData % 255);
+                    break;
+                   
+                case 3:
+                    red = 0 + (plotHsvData % 255);
+                    green = 255;
+                    blue = 0;
+                    break;
+
+                case 4:
+                    red = 255;
+                    green = 255 - (plotHsvData % 255);
+                    blue = 0;
+                    break;
+
+            }
+        }
+        */
+
+        
         public void ToHsv(int plotHsvData)
         {
             switch (plotHsvData / 255)
@@ -544,7 +653,7 @@ namespace SignalAnalyzer
                     green = 0 + (plotHsvData % 255)/2;
                     blue = 255 - (plotHsvData % 255);
                     break;
-
+        
                 /*
             case 4:
                 red = 0+ (plotHsvData % 255);
@@ -559,6 +668,8 @@ namespace SignalAnalyzer
                     blue = 255 - (plotHsvData % 255);
                     break;
                     */
+
+        
                 case 7:
                     red = 0 + (plotHsvData % 255);
                     green = 255 / 2 + (plotHsvData % 255)/2;
@@ -576,6 +687,81 @@ namespace SignalAnalyzer
                     green = 255/2 - (plotHsvData % 255)/2;
                     blue = 0;
                     break;
+
+                case 10:
+                    red = 255 - (plotHsvData % 255) / 2;
+                    green = 0;
+                    blue = 0;
+                    break;
+
+            }
+        }
+        
+        
+
+        public void DrawGLCM(PictureBox picture, int[,]data)
+        {
+            Graphics g;
+
+            initSpectrogram(picture);
+            try
+            {
+                picture.Refresh();
+                picture.Image = new Bitmap(picture.Width, picture.Height);
+                g = Graphics.FromImage(picture.Image);
+                myFont = new Font("Arial", 9);
+                spectrogramPen = new Pen(Color.FromArgb(0, 0, 0), penSize);
+
+                var boundaryPen = new Pen(Color.FromArgb(200, 0, 0), 10);
+
+                //グラフの描画
+
+                float bottomUp, dataIntervalNomalization;
+                float penSizeHalf = penSize / 2;
+
+                for (int i = 1; i < data.GetLength(0); i++)
+                {
+                    for (int j = 1; j < data.GetLength(1); j++)
+                    {
+                        if (dataMax < data[i,j]) dataMax = (float)data[i,j];
+                        if (dataMin > data[i,j]) dataMin = (float)data[i,j];
+                    }
+                }
+
+                for(int j = 1; j < data.GetLength(0); j++)
+                {
+                    dataIntervalNomalization = 1 / (dataMax - dataMin);
+
+                    for (int i = 1; i < data.GetLength(1); i++)
+                    {
+                        plotData = (int)((data[j,i]) * 255 * 10 * dataIntervalNomalization);
+                        ToHsv(plotData);
+
+                        /* color */
+                        spectrogramPen.Color = Color.FromArgb(red, green, blue);
+
+
+                        /* monochrome */
+                        //spectrogramPen.Color = Color.FromArgb(255 - plotData / 10, 255 - plotData / 10, 255 - plotData / 10);
+
+                        g.DrawLine(spectrogramPen,
+                             (float)(xZero + 2 * (j - 1)),
+                             (float)(yZero - i * 2 - penSizeHalf),
+                             (float)(xZero + 2 * (j)),
+                             (float)(yZero - i * 2 - penSizeHalf));
+                    }
+                }
+
+                drawAxis(g, picture);
+
+                picture.Image.Save("C:/Users/sawada/Desktop/glcmDegree.bmp");    
+
+                //Graphicsリソース解放
+                g.Dispose();
+                Console.WriteLine("Done draw!");
+            }
+            catch (Exception e)
+            {
 
             }
         }

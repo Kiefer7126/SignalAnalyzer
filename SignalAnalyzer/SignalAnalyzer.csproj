@@ -46,11 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeatDetection.cs" />
+    <Compile Include="ChorusStructure.cs" />
     <Compile Include="ExportFile.cs" />
     <Compile Include="FrequencyAnalyzer.cs" />
     <Compile Include="GenerateWave.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GroupingStructure.cs" />
+    <Compile Include="ImageProcessing.cs" />
     <Compile Include="ImportFile.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>

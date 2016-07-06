@@ -121,6 +121,55 @@ namespace SignalAnalyzer
         }
 
         /**
+ * ReadMetricalStructure
+ * 概要：拍節構造.txtを読み込む
+ * @param なし
+ * @return MetricalStructure metricalstruct
+ */
+
+        public ChorusStructure ReadTruthCluster(string truthClusterName)
+        {
+            var chorusStructure = new ChorusStructure();
+            int[] startTime, endTime;
+            string[] splitText, splitElement, label;
+
+            splitText = ReadText(Formats.Text, truthClusterName);
+
+            startTime = new int[splitText.Length - 1];
+            endTime = new int[splitText.Length - 1];
+            label = new string[splitText.Length - 1];
+
+            for (int i = 0; i < splitText.Length - 1 /* 末尾の削除 */; i++)
+            {
+                splitElement = splitText[i].Split("\t".ToCharArray());
+                startTime[i] = Convert.ToInt32(splitElement[0]);
+                endTime[i] = Convert.ToInt32(splitElement[1]);
+                label[i] = splitElement[2];
+            }
+
+            chorusStructure.StartTime = startTime;
+            chorusStructure.EndTime = endTime;
+            chorusStructure.Label = label;
+
+            return chorusStructure;
+        }
+
+        public string[] ReadGroupingStructure(string FileName, string type)
+        {
+            string[] groupingStructure;
+            if (type == "system")
+            {
+                groupingStructure = ReadText(Formats.Text, FileName).Where(c => c != "").ToArray();
+                groupingStructure = groupingStructure.Where(c => c != "\"x\"").ToArray();
+            }
+            else
+            {
+                groupingStructure = ReadText(Formats.Text, FileName);
+            }
+            return groupingStructure;
+        }
+
+        /**
          * ReadAudioWav
          * 概要：音楽データ.wavを読み込む
          * @param  なし
@@ -201,7 +250,7 @@ namespace SignalAnalyzer
                             //wavFile.dataID = br.ReadBytes(4);
                             wavFile.dataSize = br.ReadUInt32();
 
-                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize; //4分の1サイズ
+                            uint dataArrayLength = wavFile.dataSize / wavFile.blockSize / 2 / 8; //4分の1サイズ
 
                             int[] rightDataArray = new int[dataArrayLength];
                             int[] leftDataArray = new int[dataArrayLength];
