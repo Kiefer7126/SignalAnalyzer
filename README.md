@@ -1,0 +1,14 @@
+# SignalAnalzer
+## BeatDetection.cs
+## ChorusStructure.cs
+## ExportFile.cs
+## FrequencyAnalyzer.cs
+## GenerateWave.cs
+## Graph.cs
+## GroupingStructure.cs
+## ImageProcessing.cs
+## ImportFile.cs
+## MainWindow.cs
+## MatricalStructure.cs
+## WavFile.cs
+## WindowFunction.cs
